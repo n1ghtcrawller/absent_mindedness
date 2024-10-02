@@ -15,8 +15,8 @@
 .dropdown-list {
     position: absolute;
     z-index: 10;
-    background-color: white;
-    border: 1px solid #ccc;
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);    border: 1px solid #ccc;
     width: 100%;
     max-height: 150px;
     overflow-y: auto;

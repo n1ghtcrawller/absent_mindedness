@@ -58,8 +58,8 @@
     border: 1px solid #ccc; /* Исправлено на единый стиль рамки */
     border-radius: 10px; /* Соответствует остальным элементам */
     font-size: 16px;
-    background-color: #fff;
-}
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);}
 
 /* Стиль для кнопки отправки формы */
 .self-reminder-container button[type="submit"] {
@@ -84,9 +84,9 @@
 .custom-input:disabled,
 .self-reminder-container select:disabled,
 .custom-input-textarea:disabled {
-    background-color: #e9ecef; /* Серый фон */
-    color: #6c757d; /* Серый текст */
-    border-color: #dee2e6; /* Светлая рамка */
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+    border-color: var(--tg-theme-text-color);
     cursor: not-allowed; /* Курсор, указывающий, что элемент отключен */
 }
 
@@ -98,8 +98,8 @@
     padding: 10px; /* Отступ внутри контейнера */
     border: 1px solid #ddd; /* Легкая рамка, как у формы */
     border-radius: 10px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Фон для контейнера */
-}
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);}
 
 /* Стиль для аватара пользователя */
 .user-avatar {
@@ -122,5 +122,4 @@
 
 .user-details p {
     margin: 0; /* Убираем отступы */
-    color: gray; /* Цвет для username */
-}
+    color: var(--tg-theme-text-color);}
