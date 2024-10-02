@@ -1,6 +1,6 @@
 .dropdown-container {
     position: relative;
-    width: 100%;
+    width: 99%;
 }
 
 .dropdown-input {
@@ -8,13 +8,15 @@
     padding: 8px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
     box-sizing: border-box;
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
 }
 
 .dropdown-list {
+    z-index: 1000;
     position: absolute;
-    z-index: 10;
     background: var(--tg-theme-bg-color);
     color: var(--tg-theme-text-color);
     border: 1px solid #ccc;
