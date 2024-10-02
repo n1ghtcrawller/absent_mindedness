@@ -45,7 +45,7 @@
     width: 100%;
     height: 100px; /* Увеличенная высота для textarea */
     padding: 10px;
-    border: 0.5px solid #ccc;
+    border: 1px solid #ccc; /* Исправлено на единый стиль рамки */
     border-radius: 10px;
     font-size: 16px;
     resize: vertical; /* Возможность изменения размера textarea */
@@ -55,8 +55,8 @@
 .self-reminder-container select {
     width: 100%;
     padding: 10px;
-    border: 1px solid ;
-    border-radius: 5px;
+    border: 1px solid #ccc; /* Исправлено на единый стиль рамки */
+    border-radius: 10px; /* Соответствует остальным элементам */
     font-size: 16px;
     background-color: #fff;
 }
@@ -76,9 +76,9 @@
 }
 
 /* Эффект при наведении на кнопку */
-/*.self-reminder-container button[type="submit"]: {*/
-    /*background-color: #cccccc; !* Более темный синий при наведении *!*/
-/*}*/
+.self-reminder-container button[type="submit"]:hover {
+    background-color: #7a00cc; /* Более темный цвет при наведении */
+}
 
 /* Стиль для disabled полей */
 .custom-input:disabled,
@@ -89,13 +89,19 @@
     border-color: #dee2e6; /* Светлая рамка */
     cursor: not-allowed; /* Курсор, указывающий, что элемент отключен */
 }
-/* SelfReminder.css */
+
+/* Контейнер пользователя */
 .user-info-container {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    padding: 10px; /* Отступ внутри контейнера */
+    border: 1px solid #ddd; /* Легкая рамка, как у формы */
+    border-radius: 10px; /* Закругленные углы */
+    background-color: #f9f9f9; /* Фон для контейнера */
 }
 
+/* Стиль для аватара пользователя */
 .user-avatar {
     width: 50px; /* Размер аватара */
     height: 50px; /* Размер аватара */
@@ -103,6 +109,7 @@
     margin-right: 15px; /* Отступ справа */
 }
 
+/* Информация о пользователе */
 .user-details {
     display: flex;
     flex-direction: column;

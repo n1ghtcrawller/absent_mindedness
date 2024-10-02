@@ -38,23 +38,23 @@ const SelfReminder = () => {
     return (
         <div className="self-reminder-container">
             {/* Контейнер пользователя */}
-            {user && (
-                <div className="user-info-container">
-                    <img
-                        src={user.photo_url || 'default-avatar.png'}
-                        alt="User Avatar"
-                        className="user-avatar"
-                    />
-                    <div className="user-details">
-                        <h3>{user.first_name} {user.last_name || ''}</h3>
-                        <div>
-                        @{user.username}
-                        </div>
-                    </div>
-                </div>
-            )}
             <h2>Создать напоминание себе</h2>
             <form onSubmit={handleSubmit}>
+                {user && (
+                    <div className="user-info-container">
+                        <img
+                            src={user.photo_url || 'default-avatar.png'}
+                            alt="User Avatar"
+                            className="user-avatar"
+                        />
+                        <div className="user-details">
+                            <h3>{user.first_name} {user.last_name || ''}</h3>
+                            <div>
+                                @{user.username}
+                            </div>
+                        </div>
+                    </div>
+                )}
                 <div>
                     <label>О чём напомнить?</label>
                     <CustomInput
