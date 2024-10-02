@@ -1,10 +1,12 @@
 import React from 'react';
 import Button from '../../components/Button/Button'; // Импортируем компонент Button
 import './MainPage.css'; // Подключение CSS для стилизации (создайте файл при необходимости)
-
+import {useNavigate} from "react-router-dom";
 const MainPage = () => {
+    const navigate = useNavigate();
     // Функция, которая сработает при выборе "Напомнить себе"
     const handleRemindSelf = () => {
+        navigate('/self_reminder');
         // Здесь можно добавить логику для перехода на страницу создания напоминания для себя
     };
 
