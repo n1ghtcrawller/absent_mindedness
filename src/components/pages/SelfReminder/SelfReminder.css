@@ -18,6 +18,7 @@
 /* Стиль для каждого поля формы */
 .self-reminder-container div {
     margin-bottom: 15px; /* Отступ между полями */
+    width: 100%;
 }
 
 /* Метки для инпутов */
@@ -128,3 +129,8 @@
 .user-details p {
     margin: 0; /* Убираем отступы */
     color: var(--tg-theme-text-color);}
+
+.custom-date {
+    margin-top: 20px;
+    height: 40px;
+}

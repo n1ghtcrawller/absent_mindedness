@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import CustomInput from '../../components/CustomInput/CustomInput';
-import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput'
+import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import './SelfReminder.css';
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
@@ -8,7 +10,7 @@ const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 �
 const SelfReminder = () => {
     const [user, setUser] = useState(null);
     const [reminderText, setReminderText] = useState('');
-    const [eventDate, setEventDate] = useState('');
+    const [eventDate, setEventDate] = useState(null); // Измените на null для использования DatePicker
     const [reminderTime, setReminderTime] = useState('');
     const [repeatCount, setRepeatCount] = useState(1);
     const [reminderBefore, setReminderBefore] = useState('5 минут');
@@ -69,25 +71,31 @@ const SelfReminder = () => {
 
                 <div>
                     <label>Когда событие?</label>
-                    <CustomInput
-                        type="date"
-                        value={eventDate}
-                        onChange={(e) => setEventDate(e.target.value)}
-                        className="custom-input"
-                        required
-                    />
+                    <DatePicker
+                        selected={eventDate} // Используем состояние для выбора даты
+                        onChange={(date) => setEventDate(date)} // Устанавливаем новое значение
+                        dateFormat="dd/MM/yyyy" // Формат даты
+                        className="custom-input" // Ваш стиль
+                        placeholderText="Выберите дату"
+                        required/>
                 </div>
 
                 <div>
                     <label>Во сколько напомнить?</label>
-                    <CustomInput
-                        type="time"
-                        value={reminderTime}
-                        onChange={(e) => setReminderTime(e.target.value)}
-                        className="custom-input"
+                    <DatePicker
+                        selected={reminderTime} // Используем состояние для выбора времени
+                        onChange={(time) => setReminderTime(time)} // Устанавливаем новое значение
+                        showTimeSelect // Позволяет выбрать время
+                        showTimeSelectOnly // Позволяет выбирать только время
+                        timeIntervals={1} // Интервал выбора минут
+                        dateFormat="HH:mm" // Формат времени
+                        timeFormat="HH:mm" // Формат времени
+                        className="custom-input" // Ваш стиль
+                        placeholderText="Выберите время"
                         required
                     />
                 </div>
+
 
                 <div>
                     <label>За сколько напомнить?</label>
