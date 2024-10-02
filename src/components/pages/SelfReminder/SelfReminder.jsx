@@ -95,6 +95,7 @@ const SelfReminder = () => {
                         onChange={(e) => setReminderDate(e.target.value)}
                         className="custom-date"
                         required
+                        placeholder={"Выберите дату"}
                     />
                 </div>
 
@@ -108,6 +109,7 @@ const SelfReminder = () => {
                         onChange={(e) => setReminderTime(e.target.value)}
                         className="custom-time"
                         required
+                        placeholder={"Выберите время"}
                     />
                 </div>
 
