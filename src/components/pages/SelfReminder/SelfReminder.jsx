@@ -74,7 +74,7 @@ const SelfReminder = () => {
                         type="date"
                         value={reminderDate}
                         onChange={(e) => setReminderDate(e.target.value)}
-                        className="custom-input"
+                        className="custom-date"
                         required
                     />
                 </div>
@@ -85,7 +85,7 @@ const SelfReminder = () => {
                         type="time"
                         value={reminderTime}
                         onChange={(e) => setReminderTime(e.target.value)}
-                        className="custom-input"
+                        className="custom-time"
                         required
                     />
                 </div>

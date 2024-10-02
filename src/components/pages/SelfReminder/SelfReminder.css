@@ -130,7 +130,10 @@
     margin: 0; /* Убираем отступы */
     color: var(--tg-theme-text-color);}
 
-.custom-date {
-    margin-top: 20px;
-    height: 40px;
+.custom-date, .custom-time {
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+    border: none;
+    width: 100%;
+    height: 20px;
 }

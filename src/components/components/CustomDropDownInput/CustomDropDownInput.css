@@ -9,12 +9,14 @@
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 10px;
+    height: 40px;
     box-sizing: border-box;
     background: var(--tg-theme-bg-color);
     color: var(--tg-theme-text-color);
 }
 
 .dropdown-list {
+    border-radius: 10px;
     z-index: 1000;
     position: absolute;
     background: var(--tg-theme-bg-color);
