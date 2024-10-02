@@ -13,6 +13,7 @@
     box-sizing: border-box;
     background: var(--tg-theme-bg-color);
     color: var(--tg-theme-text-color);
+    text-align: center;
 }
 
 .dropdown-list {
@@ -28,6 +29,7 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    text-align: center;
 }
 
 .dropdown-item {
