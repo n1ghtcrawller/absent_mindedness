@@ -38,6 +38,7 @@
     font-size: 16px;
     box-sizing: border-box;
     background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -50,6 +51,9 @@
     border-radius: 10px;
     font-size: 16px;
     resize: vertical; /* Возможность изменения размера textarea */
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+
 }
 
 /* Стили для dropdown */
