@@ -77,25 +77,20 @@ const SelfReminder = () => {
                         dateFormat="dd/MM/yyyy" // Формат даты
                         className="custom-input" // Ваш стиль
                         placeholderText="Выберите дату"
-                        required/>
-                </div>
-
-                <div>
-                    <label>Во сколько напомнить?</label>
-                    <DatePicker
-                        selected={reminderTime} // Используем состояние для выбора времени
-                        onChange={(time) => setReminderTime(time)} // Устанавливаем новое значение
-                        showTimeSelect // Позволяет выбрать время
-                        showTimeSelectOnly // Позволяет выбирать только время
-                        timeIntervals={1} // Интервал выбора минут
-                        dateFormat="HH:mm" // Формат времени
-                        timeFormat="HH:mm" // Формат времени
-                        className="custom-input" // Ваш стиль
-                        placeholderText="Выберите время"
                         required
                     />
                 </div>
 
+                <div>
+                    <label>Во сколько напомнить?</label>
+                    <CustomInput
+                        type="time"
+                        value={reminderTime}
+                        onChange={(e) => setReminderTime(e.target.value)}
+                        className="custom-input"
+                        required
+                    />
+                </div>
 
                 <div>
                     <label>За сколько напомнить?</label>
