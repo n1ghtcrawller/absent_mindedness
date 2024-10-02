@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
-import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import './SelfReminder.css';
 
@@ -10,7 +9,7 @@ const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 �
 const SelfReminder = () => {
     const [user, setUser] = useState(null);
     const [reminderText, setReminderText] = useState('');
-    const [eventDate, setEventDate] = useState(null); // Измените на null для использования DatePicker
+    const [reminderDate, setReminderDate] = useState(null); // Измените на null для использования DatePicker
     const [reminderTime, setReminderTime] = useState('');
     const [repeatCount, setRepeatCount] = useState(1);
     const [reminderBefore, setReminderBefore] = useState('5 минут');
@@ -71,12 +70,11 @@ const SelfReminder = () => {
 
                 <div>
                     <label>Когда событие?</label>
-                    <DatePicker
-                        selected={eventDate} // Используем состояние для выбора даты
-                        onChange={(date) => setEventDate(date)} // Устанавливаем новое значение
-                        dateFormat="dd/MM/yyyy" // Формат даты
-                        className="custom-input" // Ваш стиль
-                        placeholderText="Выберите дату"
+                    <CustomInput
+                        type="date"
+                        value={reminderDate}
+                        onChange={(e) => setReminderDate(e.target.value)}
+                        className="custom-input"
                         required
                     />
                 </div>
