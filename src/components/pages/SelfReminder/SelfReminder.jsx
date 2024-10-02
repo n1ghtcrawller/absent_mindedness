@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,11 +9,15 @@ const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 �
 const SelfReminder = () => {
     const [user, setUser] = useState(null);
     const [reminderText, setReminderText] = useState('');
-    const [reminderDate, setReminderDate] = useState(null); // Измените на null для использования DatePicker
+    const [reminderDate, setReminderDate] = useState(null);
     const [reminderTime, setReminderTime] = useState('');
     const [repeatCount, setRepeatCount] = useState(1);
     const [reminderBefore, setReminderBefore] = useState('5 минут');
     const [comment, setComment] = useState('');
+
+    // Используем useRef для доступа к элементам даты и времени
+    const dateInputRef = useRef(null);
+    const timeInputRef = useRef(null);
 
     // Получение данных пользователя
     useEffect(() => {
@@ -28,12 +32,25 @@ const SelfReminder = () => {
         e.preventDefault();
         console.log({
             reminderText,
-            eventDate,
+            eventDate: reminderDate,
             reminderTime,
             repeatCount,
             reminderBefore,
             comment
         });
+    };
+
+    // Функции для фокусировки на полях ввода даты и времени
+    const handleDateClick = () => {
+        if (dateInputRef.current) {
+            dateInputRef.current.focus(); // Фокусируемся на поле даты
+        }
+    };
+
+    const handleTimeClick = () => {
+        if (timeInputRef.current) {
+            timeInputRef.current.focus(); // Фокусируемся на поле времени
+        }
     };
 
     return (
@@ -68,9 +85,11 @@ const SelfReminder = () => {
                     />
                 </div>
 
-                <div>
+                {/* Контейнер для даты */}
+                <div onClick={handleDateClick} className="custom-date-container">
                     <label>Когда событие?</label>
                     <CustomInput
+                        ref={dateInputRef} // Привязываем useRef к input даты
                         type="date"
                         value={reminderDate}
                         onChange={(e) => setReminderDate(e.target.value)}
@@ -79,9 +98,11 @@ const SelfReminder = () => {
                     />
                 </div>
 
-                <div>
+                {/* Контейнер для времени */}
+                <div onClick={handleTimeClick} className="custom-time-container">
                     <label>Во сколько напомнить?</label>
                     <CustomInput
+                        ref={timeInputRef} // Привязываем useRef к input времени
                         type="time"
                         value={reminderTime}
                         onChange={(e) => setReminderTime(e.target.value)}
