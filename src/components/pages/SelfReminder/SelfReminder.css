@@ -37,6 +37,7 @@
     border-radius: 10px;
     font-size: 16px;
     box-sizing: border-box;
+    background: var(--tg-theme-bg-color);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
