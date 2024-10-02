@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 Button {
     background-color: #8b00ff;
     color: #fff;
@@ -5,4 +6,7 @@ Button {
     border-radius: 10px;
     height: 40px;
     padding-inline: 20px;
+    width: 220px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
 }

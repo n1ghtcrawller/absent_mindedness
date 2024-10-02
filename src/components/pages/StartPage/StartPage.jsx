@@ -2,12 +2,12 @@
 import React from 'react';
 import Button from '../../components/Button/Button';
 import './StartPage.css';
-
+import {useNavigate} from "react-router-dom";
 
 const StartPage = () => {
-    // Функция, которая будет срабатывать при клике на кнопку
+    const navigate = useNavigate();
     const handleButtonClick = () => {
-        alert('Кнопка нажата!');
+    navigate('main_page');
     };
 
     return (
