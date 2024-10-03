@@ -1,0 +1,41 @@
+/* Confirm.css */
+
+:root {
+    --primary-button-color: #7a00cc; /* Основной цвет кнопки */
+}
+
+.confirm-container {
+    max-width: 500px; /* Максимальная ширина контейнера */
+    margin: 40px auto; /* Центрирование контейнера */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 8px; /* Закругленные углы */
+    background: var(--tg-theme-bg-color); /* Фоновый цвет */
+    color: var(--tg-theme-text-color); /* Цвет текста */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень */
+    display: flex; /* Используем flexbox */
+    flex-direction: column; /* Вертикальная компоновка */
+    gap: 15px; /* Промежуток между элементами */
+    justify-content: center;
+    align-items: center;
+}
+
+h2 {
+    text-align: center; /* Центрирование заголовка */
+    font-size: 24px; /* Размер шрифта заголовка */
+    margin-bottom: 20px; /* Отступ снизу */
+}
+
+p {
+    font-size: 16px; /* Размер шрифта для текста */
+    line-height: 1.5; /* Высота строки */
+    margin: 0; /* Убираем отступы */
+}
+
+strong {
+    font-weight: bold; /* Жирный текст для заголовков */
+}
+
+
+.confirm-button:hover {
+    background-color: #6500a3; /* Цвет кнопки при наведении */
+}

@@ -136,12 +136,16 @@
 
 /* Стили для выбора даты и времени */
 .custom-date, .custom-time {
-    color: var(--tg-theme-text-color);
+    color: white;
     border: none;
     width: 30%;
     height: 25px;
     background-color: #8b00ff;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 
 .div-textarea {
