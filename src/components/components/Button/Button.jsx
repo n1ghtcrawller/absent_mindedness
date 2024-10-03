@@ -14,13 +14,5 @@ const Button = ({ label, onClick, style, className, disabled }) => {
     );
 };
 
-// Устанавливаем значения по умолчанию для пропсов
-Button.defaultProps = {
-    label: 'Кнопка',   // Текст по умолчанию
-    onClick: () => {}, // Пустая функция по умолчанию
-    style: {},         // Пустой объект для стилей
-    className: '',     // Пустая строка для классов
-    disabled: false    // Кнопка активна по умолчанию
-};
 
 export default Button;

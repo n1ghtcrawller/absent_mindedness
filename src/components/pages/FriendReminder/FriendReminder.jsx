@@ -6,28 +6,22 @@ import './FriendReminder.css';
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
 
-// Моковые данные пользователей, можно заменить на реальные данные
-const friendsList = [
-    { id: 1, name: 'Иван Иванов', username: 'ivanov' },
-    { id: 2, name: 'Алексей Петров', username: 'petrov' },
-    { id: 3, name: 'Мария Смирнова', username: 'smirnova' },
-];
-
 const FriendReminder = () => {
-    const [user, setUser] = useState(null);
-    const [selectedFriend, setSelectedFriend] = useState(null); // Для выбранного друга
+    const [user, setUser] = useState('');
+    const [selectedFriend, setSelectedFriend] = useState(''); // Для выбранного друга
     const [reminderText, setReminderText] = useState('');
-    const [reminderDate, setReminderDate] = useState(null);
+    const [reminderDate, setReminderDate] = useState('');
     const [reminderTime, setReminderTime] = useState('');
     const [repeatCount, setRepeatCount] = useState(1);
     const [reminderBefore, setReminderBefore] = useState('5 минут');
     const [comment, setComment] = useState('');
+    const [friendsList, setFriendsList] = useState([]); // Массив друзей
 
     // Используем useRef для доступа к элементам даты и времени
     const dateInputRef = useRef(null);
     const timeInputRef = useRef(null);
 
-    // Получение данных пользователя
+    // Получение данных пользователя из Telegram
     useEffect(() => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
@@ -35,9 +29,23 @@ const FriendReminder = () => {
         }
     }, []);
 
+    // Загрузка списка друзей из локального хранилища при загрузке страницы
+    useEffect(() => {
+        const cachedFriends = JSON.parse(localStorage.getItem('friendsList')) || [];
+        setFriendsList(cachedFriends);
+    }, []);
+
     // Обработка отправки формы
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Если выбран новый друг, добавить его в список и сохранить в localStorage
+        if (selectedFriend && !friendsList.includes(selectedFriend)) {
+            const updatedFriendsList = [...friendsList, selectedFriend];
+            setFriendsList(updatedFriendsList);
+            localStorage.setItem('friendsList', JSON.stringify(updatedFriendsList));
+        }
+
         console.log({
             reminderText,
             eventDate: reminderDate,
@@ -64,7 +72,6 @@ const FriendReminder = () => {
 
     return (
         <div className="friend-reminder-container">
-            {/* Контейнер пользователя */}
             <h2>Создать напоминание для друга</h2>
             <form onSubmit={handleSubmit}>
                 {user && (
@@ -86,22 +93,12 @@ const FriendReminder = () => {
                 {/* Контейнер для выбора друга */}
                 <div>
                     <label>Выберите друга</label>
-                    <select
-                        value={selectedFriend?.id || ''}
-                        onChange={(e) => {
-                            const friend = friendsList.find(f => f.id === parseInt(e.target.value));
-                            setSelectedFriend(friend);
-                        }}
-                        className="custom-dropdown"
-                        required
-                    >
-                        <option value="" disabled>Выберите друга</option>
-                        {friendsList.map(friend => (
-                            <option key={friend.id} value={friend.id}>
-                                {friend.name} (@{friend.username})
-                            </option>
-                        ))}
-                    </select>
+                    <CustomDropdownInput
+                        options={friendsList}
+                        value={selectedFriend}
+                        onChange={(value) => setSelectedFriend(value)}
+                        placeholder="Введите Имя или @user_id"
+                    />
                 </div>
 
                 <div>
@@ -117,7 +114,7 @@ const FriendReminder = () => {
                 </div>
 
                 {/* Контейнер для даты */}
-                <div onClick={handleDateClick} className="custom-date-container">
+                <div onClick={handleDateClick}>
                     <label>Когда событие?</label>
                     <CustomInput
                         ref={dateInputRef} // Привязываем useRef к input даты
@@ -159,8 +156,18 @@ const FriendReminder = () => {
                     <CustomInput
                         type="number"
                         value={repeatCount}
-                        onChange={(e) => setRepeatCount(e.target.value)}
-                        min="1"
+                        onChange={(e) => {
+                            const inputValue = e.target.value; // Получаем текущее значение ввода
+
+                            // Если поле пустое, устанавливаем значение как пустую строку
+                            if (inputValue === '') {
+                                setRepeatCount('');
+                            } else {
+                                const newValue = Math.max(0, inputValue); // Убедитесь, что значение неотрицательное
+                                setRepeatCount(newValue);
+                            }
+                        }}
+                        min="0" // Убедитесь, что минимальное значение 0
                         className="custom-input"
                         required
                     />

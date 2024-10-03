@@ -7,9 +7,9 @@ import './SelfReminder.css';
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
 
 const SelfReminder = () => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState('');
     const [reminderText, setReminderText] = useState('');
-    const [reminderDate, setReminderDate] = useState(null);
+    const [reminderDate, setReminderDate] = useState('');
     const [reminderTime, setReminderTime] = useState('');
     const [repeatCount, setRepeatCount] = useState(1);
     const [reminderBefore, setReminderBefore] = useState('5 минут');
@@ -55,7 +55,6 @@ const SelfReminder = () => {
 
     return (
         <div className="self-reminder-container">
-            {/* Контейнер пользователя */}
             <h2>Создать напоминание себе</h2>
             <form onSubmit={handleSubmit}>
                 {user && (
@@ -128,8 +127,18 @@ const SelfReminder = () => {
                     <CustomInput
                         type="number"
                         value={repeatCount}
-                        onChange={(e) => setRepeatCount(e.target.value)}
-                        min="1"
+                        onChange={(e) => {
+                            const inputValue = e.target.value; // Получаем текущее значение ввода
+
+                            // Если поле пустое, устанавливаем значение как пустую строку
+                            if (inputValue === '') {
+                                setRepeatCount('');
+                            } else {
+                                const newValue = Math.max(0, inputValue); // Убедитесь, что значение неотрицательное
+                                setRepeatCount(newValue);
+                            }
+                        }}
+                        min="0" // Убедитесь, что минимальное значение 0
                         className="custom-input"
                         required
                     />
