@@ -10,8 +10,8 @@ export const ReminderProvider = ({ children }) => {
         reminderText: '',
         reminderDate: '',
         reminderTime: '',
-        repeatCount: 1,
-        reminderBefore: '5 минут',
+        repeatCount: 3,
+        reminderBefore: '30 минут',
         comment: '',
         friendsList: []
     });
