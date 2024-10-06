@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../../components/Button/Button'; // Импортируем компонент Button
 import './MainPage.css'; // Подключение CSS для стилизации (создайте файл при необходимости)
 import {useNavigate} from "react-router-dom";
+import BackButton from "../../components/BackButton/BackButton";
 const MainPage = () => {
     const navigate = useNavigate();
     // Функция, которая сработает при выборе "Напомнить себе"
@@ -18,6 +19,7 @@ const MainPage = () => {
 
     return (
         <div className="main-page-container">
+            <BackButton />
             <div className="main-title">
                 <h1>Выберите шаблон напоминания</h1>
             </div>

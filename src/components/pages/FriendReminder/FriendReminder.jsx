@@ -53,7 +53,7 @@ const FriendReminder = () => {
 
         // Подготовка данных для отправки
         const reminderDetails = {
-            creator: `${user.first_name} ${user.last_name || ''}`, // Полное имя создателя
+            creator: `${user?.first_name} ${user?.last_name || ''}`, // Полное имя создателя
             friend: selectedFriend, // Друг, которому создается напоминание
             reminderText,
             reminderDate,
@@ -170,7 +170,7 @@ const FriendReminder = () => {
                             onChange={(value) => setReminderData(prev => ({...prev, reminderBefore: value}))}
                             placeholder="Выберите время"
                             className="custom-date"
-                            disabled
+                            isDisabled={true}
                         />
                     </span>
 
@@ -186,9 +186,14 @@ const FriendReminder = () => {
                             min="0"
                             className="custom-input"
                             required
+                            isDisabled={true}
                         />
                     </span>
                 </div>
+                <p className="development-note" style={{fontSize: 'small', color: '#888'}}>
+                    Функция ещё в разработке. Бот по умолчанию отправляет три напоминания за 3 часа, за 1 час и за 30
+                    минут.
+                </p>
 
                 <div>
                     <label>Комментарий</label>

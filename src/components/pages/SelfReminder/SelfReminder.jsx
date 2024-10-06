@@ -106,7 +106,7 @@ const SelfReminder = () => {
                     <CustomInput
                         type="text"
                         value={reminderText}
-                        onChange={(e) => setReminderData(prev => ({ ...prev, reminderText: e.target.value }))}
+                        onChange={(e) => setReminderData(prev => ({...prev, reminderText: e.target.value}))}
                         placeholder="Введите описание напоминания"
                         className="custom-input"
                         required
@@ -148,10 +148,11 @@ const SelfReminder = () => {
                         <CustomDropdownInput
                             options={reminderOptions}
                             value={reminderBefore}
-                            onChange={(value) => setReminderData(prev => ({ ...prev, reminderBefore: value }))}
+                            onChange={(value) => setReminderData(prev => ({...prev, reminderBefore: value}))}
                             placeholder="Выберите время"
                             className="custom-date"
-                            disabled
+                            isDisabled={true}
+
                         />
                     </span>
 
@@ -162,21 +163,25 @@ const SelfReminder = () => {
                             value={repeatCount}
                             onChange={(e) => {
                                 const inputValue = e.target.value;
-                                setReminderData(prev => ({ ...prev, repeatCount: Math.max(0, inputValue) }));
+                                setReminderData(prev => ({...prev, repeatCount: Math.max(0, inputValue)}));
                             }}
                             min="0"
                             className="custom-input"
                             required
+                            isDisabled={true}
                         />
                     </span>
                 </div>
-
+                <p className="development-note" style={{fontSize: 'small', color: '#888'}}>
+                    Функция ещё в разработке. Бот по умолчанию отправляет три напоминания за 3 часа, за 1 час и за 30
+                    минут.
+                </p>
                 <div>
                     <label>Комментарий</label>
                     <CustomInput
                         type="textarea"
                         value={comment}
-                        onChange={(e) => setReminderData(prev => ({ ...prev, comment: e.target.value }))}
+                        onChange={(e) => setReminderData(prev => ({...prev, comment: e.target.value}))}
                         placeholder="Введите комментарий (необязательно)"
                         className="custom-input-textarea"
                     />
