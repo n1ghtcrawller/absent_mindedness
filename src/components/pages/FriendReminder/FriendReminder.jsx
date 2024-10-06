@@ -53,7 +53,7 @@ const FriendReminder = () => {
 
         // Подготовка данных для отправки
         const reminderDetails = {
-            creator: user, // Пользователь, создающий напоминание
+            creator: `${user.first_name} ${user.last_name || ''}`, // Полное имя создателя
             friend: selectedFriend, // Друг, которому создается напоминание
             reminderText,
             reminderDate,
@@ -63,8 +63,8 @@ const FriendReminder = () => {
             comment
         };
 
-        console.log(reminderDetails); // Для отладки
-        navigate('/confirm');
+        setReminderData(prev => ({ ...prev, ...reminderDetails })); // Установите данные напоминания в контекст
+        navigate('/confirm'); // Переход на страницу подтверждения
     };
 
     const handleDateChange = (e) => {
