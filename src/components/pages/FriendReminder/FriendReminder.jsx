@@ -5,6 +5,8 @@ import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDrop
 import "react-datepicker/dist/react-datepicker.css";
 import './FriendReminder.css';
 import { useNavigate } from "react-router-dom";
+import BackButton from "../../components/BackButton/BackButton";
+
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
 
@@ -73,6 +75,7 @@ const FriendReminder = () => {
 
     return (
         <div className="friend-reminder-container">
+            <BackButton />
             <h2>Создать напоминание для друга</h2>
             <form onSubmit={handleSubmit}>
                 {user && (

@@ -5,6 +5,7 @@ import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDrop
 import { useNavigate } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
 import './SelfReminder.css';
+import BackButton from "../../components/BackButton/BackButton";
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
 
@@ -82,6 +83,7 @@ const SelfReminder = () => {
 
     return (
         <div className="self-reminder-container">
+            <BackButton />
             <h2>Создать напоминание себе</h2>
             <form onSubmit={handleSubmit}>
                 {user && (
