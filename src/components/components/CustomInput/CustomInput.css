@@ -1,3 +1,22 @@
+/* Стили для инпутов через CustomInput */
 .custom-input {
     width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+/* Стиль для disabled полей */
+.custom-input:disabled {
+    background: #555555; /* Светло-серый фон */
+    color: #aaa; /* Серый цвет текста */
+    border-color: #ddd; /* Цвет рамки */
+    cursor: not-allowed; /* Курсор, указывающий, что элемент отключен */
+    opacity: 0.6; /* Небольшая прозрачность для визуализации отключенного состояния */
 }

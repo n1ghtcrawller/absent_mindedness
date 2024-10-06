@@ -3,7 +3,6 @@
     max-width: 500px; /* Максимальная ширина формы */
     margin: 0 auto; /* Центрирование формы на странице */
     padding: 20px;
-
     border-radius: 10px; /* Закругленные углы */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Небольшая тень для объема */
 }
@@ -17,9 +16,6 @@
 
 /* Стиль для каждого поля формы */
 .self-reminder-container div {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*align-items: center;*/
     justify-content: center;
     margin-bottom: 15px; /* Отступ между полями */
     width: 100%;
@@ -36,7 +32,7 @@
 
 /* Стили для инпутов через CustomInput */
 .custom-input {
-    width: 100%; /* Ширина инпута на всю ширину контейнера */
+    width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -59,7 +55,6 @@
     resize: vertical; /* Возможность изменения размера textarea */
     background: var(--tg-theme-bg-color);
     color: var(--tg-theme-text-color);
-
 }
 
 /* Стили для dropdown */
@@ -70,7 +65,8 @@
     border-radius: 10px; /* Соответствует остальным элементам */
     font-size: 16px;
     background: var(--tg-theme-bg-color);
-    color: var(--tg-theme-text-color);}
+    color: var(--tg-theme-text-color);
+}
 
 /* Стиль для кнопки отправки формы */
 .self-reminder-container button[type="submit"] {
@@ -95,9 +91,9 @@
 .custom-input:disabled,
 .self-reminder-container select:disabled,
 .custom-input-textarea:disabled {
-    background: var(--tg-theme-bg-color);
-    color: var(--tg-theme-text-color);
-    border-color: var(--tg-theme-text-color);
+    background: #888888; /* Светло-серый фон */
+    color: #999; /* Серый текст для отключенных полей */
+    border-color: #ccc; /* Цвет рамки для отключенных полей */
     cursor: not-allowed; /* Курсор, указывающий, что элемент отключен */
 }
 
@@ -110,7 +106,8 @@
     border: 1px solid #ddd; /* Легкая рамка, как у формы */
     border-radius: 10px; /* Закругленные углы */
     background: var(--tg-theme-bg-color);
-    color: var(--tg-theme-text-color);}
+    color: var(--tg-theme-text-color);
+}
 
 /* Стиль для аватара пользователя */
 .user-avatar {
@@ -133,7 +130,8 @@
 
 .user-details p {
     margin: 0; /* Убираем отступы */
-    color: var(--tg-theme-text-color);}
+    color: var(--tg-theme-text-color);
+}
 
 .custom-date, .custom-time {
     color: var(--tg-theme-text-color);
@@ -147,4 +145,40 @@
 .div-textarea {
     border: none;
     width: 100%;
+}
+
+.custom-date-container {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: -15px;
+}
+
+.date-div, .time-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    width: 50%;
+}
+
+.time-div {
+    border-left: 1px solid #ccc;
+}
+
+.custom-count-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: 50%;
+    padding-bottom: 15px;
+}
+
+.development-note {
+    text-align: center;
+    font-size: small;
+    color: #888;
 }

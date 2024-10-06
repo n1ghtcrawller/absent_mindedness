@@ -1,41 +1,58 @@
-/* Confirm.css */
-
 :root {
-    --primary-button-color: #7a00cc; /* Основной цвет кнопки */
+    --primary-button-color: #7a00cc;
+    --primary-button-hover-color: #6500a3;
 }
 
 .confirm-container {
-    max-width: 500px; /* Максимальная ширина контейнера */
-    margin: 40px auto; /* Центрирование контейнера */
-    padding: 20px; /* Внутренние отступы */
-    border-radius: 8px; /* Закругленные углы */
-    background: var(--tg-theme-bg-color); /* Фоновый цвет */
-    color: var(--tg-theme-text-color); /* Цвет текста */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень */
-    display: flex; /* Используем flexbox */
-    flex-direction: column; /* Вертикальная компоновка */
-    gap: 15px; /* Промежуток между элементами */
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
-h2 {
-    text-align: center; /* Центрирование заголовка */
-    font-size: 24px; /* Размер шрифта заголовка */
-    margin-bottom: 20px; /* Отступ снизу */
+h2, p, button {
+    transition: opacity 0.5s ease; /* Плавное исчезновение текста */
 }
 
-p {
-    font-size: 16px; /* Размер шрифта для текста */
-    line-height: 1.5; /* Высота строки */
-    margin: 0; /* Убираем отступы */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: var(--primary-button-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-strong {
-    font-weight: bold; /* Жирный текст для заголовков */
+button:hover {
+    background-color: var(--primary-button-hover-color);
 }
 
+/* Скрываем весь контент, кроме утенка и текста отправки */
+.duck-sent-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
 
-.confirm-button:hover {
-    background-color: #6500a3; /* Цвет кнопки при наведении */
+.duck-gif {
+    width: 200px;
+    height: 200px;
+    object-fit: contain; /* Если нужно, чтобы GIF корректно вмещался */
+}
+
+.sent-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--tg-theme-text-color);
 }

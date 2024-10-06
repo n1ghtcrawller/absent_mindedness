@@ -28,7 +28,7 @@ const CustomDropdownInput = ({ options, value, onChange, placeholder }) => {
     };
 
     return (
-        <div className="dropdown-container">
+        <span className="dropdown-container">
             <input
                 type="text"
                 value={inputValue}
@@ -50,7 +50,7 @@ const CustomDropdownInput = ({ options, value, onChange, placeholder }) => {
                     ))}
                 </ul>
             )}
-        </div>
+        </span>
     );
 };
 

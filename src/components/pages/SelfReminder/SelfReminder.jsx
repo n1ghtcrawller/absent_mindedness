@@ -1,21 +1,28 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
+import { ReminderContext } from '../../components/ReminderContext/ReminderContext';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
+import { useNavigate } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
 import './SelfReminder.css';
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
 
 const SelfReminder = () => {
-    const [user, setUser] = useState('');
-    const [reminderText, setReminderText] = useState('');
-    const [reminderDate, setReminderDate] = useState('');
-    const [reminderTime, setReminderTime] = useState('');
-    const [repeatCount, setRepeatCount] = useState(1);
-    const [reminderBefore, setReminderBefore] = useState('5 минут');
-    const [comment, setComment] = useState('');
+    const { reminderData, setReminderData } = useContext(ReminderContext);
+    const navigate = useNavigate();
 
-    // Используем useRef для доступа к элементам даты и времени
+    const {
+        user,
+        reminderText,
+        reminderDate,
+        reminderTime,
+        repeatCount,
+        reminderBefore,
+        comment,
+        selectedFriend,
+    } = reminderData;
+
     const dateInputRef = useRef(null);
     const timeInputRef = useRef(null);
 
@@ -23,33 +30,53 @@ const SelfReminder = () => {
     useEffect(() => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
-            setUser(webAppUser);
+
+            // Set user information and selectedFriend
+            setReminderData(prev => ({
+                ...prev,
+                user: webAppUser || null, // Set user info or null
+                selectedFriend: webAppUser ? webAppUser.username : null, // Set selectedFriend to username or null
+            }));
         }
-    }, []);
+    }, [setReminderData]);
 
     // Обработка отправки формы
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log({
+            user,
             reminderText,
             eventDate: reminderDate,
             reminderTime,
             repeatCount,
             reminderBefore,
-            comment
+            comment,
+            selectedFriend // Log selectedFriend
         });
+
+        // Навигация на страницу подтверждения
+        navigate('/confirm');
     };
 
-    // Функции для фокусировки на полях ввода даты и времени
+    const handleDateChange = (e) => {
+        console.log("Выбор даты:", e.target.value);
+        setReminderData(prev => ({ ...prev, reminderDate: e.target.value }));
+    };
+
+    const handleTimeChange = (e) => {
+        console.log("Выбор времени:", e.target.value);
+        setReminderData(prev => ({ ...prev, reminderTime: e.target.value }));
+    };
+
     const handleDateClick = () => {
         if (dateInputRef.current) {
-            dateInputRef.current.focus(); // Фокусируемся на поле даты
+            dateInputRef.current.focus();
         }
     };
 
     const handleTimeClick = () => {
         if (timeInputRef.current) {
-            timeInputRef.current.focus(); // Фокусируемся на поле времени
+            timeInputRef.current.focus();
         }
     };
 
@@ -77,71 +104,69 @@ const SelfReminder = () => {
                     <CustomInput
                         type="text"
                         value={reminderText}
-                        onChange={(e) => setReminderText(e.target.value)}
+                        onChange={(e) => setReminderData(prev => ({ ...prev, reminderText: e.target.value }))}
                         placeholder="Введите описание напоминания"
                         className="custom-input"
                         required
                     />
                 </div>
 
-                {/* Контейнер для даты */}
-                <div onClick={handleDateClick} className="custom-date-container">
-                    <label>Когда событие?</label>
-                    <CustomInput
-                        ref={dateInputRef} // Привязываем useRef к input даты
-                        type="date"
-                        value={reminderDate}
-                        onChange={(e) => setReminderDate(e.target.value)}
-                        className="custom-date"
-                        required
-                        placeholder={"Выберите дату"}
-                    />
+                <div className="custom-date-container">
+                    <span className={'date-div'}>
+                        <label>Когда событие?</label>
+                        <CustomInput
+                            ref={dateInputRef}
+                            type="date"
+                            value={reminderDate}
+                            onChange={handleDateChange}
+                            className="custom-date"
+                            required
+                            placeholder={"Выберите дату"}
+                            onClick={handleDateClick}
+                        />
+                    </span>
+                    <span className={'time-div'}>
+                        <label>Во сколько событие?</label>
+                        <CustomInput
+                            ref={timeInputRef}
+                            type="time"
+                            value={reminderTime}
+                            onChange={handleTimeChange}
+                            className="custom-time"
+                            required
+                            placeholder={"Выберите время"}
+                            onClick={handleTimeClick}
+                        />
+                    </span>
                 </div>
 
-                {/* Контейнер для времени */}
-                <div onClick={handleTimeClick} className="custom-time-container">
-                    <label>Во сколько напомнить?</label>
-                    <CustomInput
-                        ref={timeInputRef} // Привязываем useRef к input времени
-                        type="time"
-                        value={reminderTime}
-                        onChange={(e) => setReminderTime(e.target.value)}
-                        className="custom-time"
-                        required
-                        placeholder={"Выберите время"}
-                    />
-                </div>
+                <div className={'custom-date-container'}>
+                    <span className={'custom-count-container'}>
+                        <label>За сколько напомнить?</label>
+                        <CustomDropdownInput
+                            options={reminderOptions}
+                            value={reminderBefore}
+                            onChange={(value) => setReminderData(prev => ({ ...prev, reminderBefore: value }))}
+                            placeholder="Выберите время"
+                            className="custom-date"
+                            disabled
+                        />
+                    </span>
 
-                <div>
-                    <label>За сколько напомнить?</label>
-                    <CustomDropdownInput
-                        options={reminderOptions}
-                        value={reminderBefore}
-                        onChange={(value) => setReminderBefore(value)}
-                        placeholder="Введите или выберите время"
-                    />
-                </div>
-
-                <div>
-                    <label>Сколько раз напомнить?</label>
-                    <CustomInput
-                        type="number"
-                        value={repeatCount}
-                        onChange={(e) => {
-                            const inputValue = e.target.value; // Получаем текущее значение ввода
-
-                            // Если поле пустое, устанавливаем значение как пустую строку
-                            if (inputValue === '') {
-                                setRepeatCount('');
-                            } else {
-                                const newValue = Math.max(0, inputValue); // Убедитесь, что значение неотрицательное
-                                setRepeatCount(newValue);
-                            }
-                        }}
-                        min="0" // Убедитесь, что минимальное значение 0
-                        className="custom-input"
-                        required
-                    />
+                    <span className={'custom-count-container'}>
+                        <label>Сколько раз напомнить?</label>
+                        <CustomInput
+                            type="number"
+                            value={repeatCount}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                setReminderData(prev => ({ ...prev, repeatCount: Math.max(0, inputValue) }));
+                            }}
+                            min="0"
+                            className="custom-input"
+                            required
+                        />
+                    </span>
                 </div>
 
                 <div>
@@ -149,7 +174,7 @@ const SelfReminder = () => {
                     <CustomInput
                         type="textarea"
                         value={comment}
-                        onChange={(e) => setComment(e.target.value)}
+                        onChange={(e) => setReminderData(prev => ({ ...prev, comment: e.target.value }))}
                         placeholder="Введите комментарий (необязательно)"
                         className="custom-input-textarea"
                     />

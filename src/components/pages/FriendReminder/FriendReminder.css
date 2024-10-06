@@ -152,3 +152,31 @@
     border: none;
     width: 100%;
 }
+.custom-date-container {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: -15px;
+}
+
+.date-div, .time-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    width: 50%;
+}
+.time-div {
+    border-left: 1px solid #ccc;
+}
+
+.custom-count-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: 50%;
+    padding-bottom: 15px;
+}

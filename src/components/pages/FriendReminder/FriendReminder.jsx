@@ -4,7 +4,7 @@ import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
 import "react-datepicker/dist/react-datepicker.css";
 import './FriendReminder.css';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
 
@@ -47,9 +47,16 @@ const FriendReminder = () => {
             localStorage.setItem('friendsList', JSON.stringify(updatedFriendsList));
         }
         navigate('/confirm');
+    };
 
-        // Переход на страницу подтверждения
+    const handleDateChange = (e) => {
+        console.log("Выбор даты:", e.target.value);
+        setReminderData(prev => ({ ...prev, reminderDate: e.target.value }));
+    };
 
+    const handleTimeChange = (e) => {
+        console.log("Выбор времени:", e.target.value);
+        setReminderData(prev => ({ ...prev, reminderTime: e.target.value })); // Обновление времени
     };
 
     const handleDateClick = () => {
@@ -89,7 +96,7 @@ const FriendReminder = () => {
                     <CustomDropdownInput
                         options={friendsList}
                         value={selectedFriend}
-                        onChange={(value) => setReminderData(prev => ({ ...prev, selectedFriend: value }))}
+                        onChange={(value) => setReminderData(prev => ({...prev, selectedFriend: value}))}
                         placeholder="Введите Имя или @user_id"
                     />
                 </div>
@@ -99,62 +106,69 @@ const FriendReminder = () => {
                     <CustomInput
                         type="text"
                         value={reminderText}
-                        onChange={(e) => setReminderData(prev => ({ ...prev, reminderText: e.target.value }))}
+                        onChange={(e) => setReminderData(prev => ({...prev, reminderText: e.target.value}))}
                         placeholder="Введите описание напоминания"
                         className="custom-input"
                         required
                     />
                 </div>
 
-                <div onClick={handleDateClick}>
-                    <label>Когда событие?</label>
-                    <CustomInput
-                        ref={dateInputRef}
-                        type="date"
-                        value={reminderDate}
-                        onChange={(e) => setReminderData(prev => ({ ...prev, reminderDate: e.target.value }))}
-                        className="custom-date"
-                        required
-                        placeholder={"Выберите дату"}
-                    />
+                <div className="custom-date-container">
+                    <span className={'date-div'}>
+                        <label>Когда событие?</label>
+                        <CustomInput
+                            ref={dateInputRef} // Привязываем useRef к input даты
+                            type="date"
+                            value={reminderDate}
+                            onChange={handleDateChange}
+                            className="custom-date"
+                            required
+                            placeholder={"Выберите дату"}
+                            onClick={handleDateClick}
+                        />
+                    </span>
+                    <span className={'time-div'}>
+                        <label>Во сколько событие?</label>
+                        <CustomInput
+                            ref={timeInputRef} // Привязываем useRef к input времени
+                            type="time"
+                            value={reminderTime}
+                            onChange={handleTimeChange}
+                            className="custom-time"
+                            required
+                            placeholder={"Выберите время"}
+                            onClick={handleTimeClick}
+                        />
+                    </span>
                 </div>
 
-                <div onClick={handleTimeClick} className="custom-time-container">
-                    <label>Во сколько напомнить?</label>
-                    <CustomInput
-                        ref={timeInputRef}
-                        type="time"
-                        value={reminderTime}
-                        onChange={(e) => setReminderData(prev => ({ ...prev, reminderTime: e.target.value }))}
-                        className="custom-time"
-                        required
-                        placeholder={"Выберите время"}
-                    />
-                </div>
+                <div className={'custom-date-container'}>
+                    <span className={'custom-count-container'}>
+                        <label>За сколько напомнить?</label>
+                        <CustomDropdownInput
+                            options={reminderOptions}
+                            value={reminderBefore}
+                            onChange={(value) => setReminderData(prev => ({...prev, reminderBefore: value}))}
+                            placeholder="Выберите время"
+                            className="custom-date"
+                            disabled
+                        />
+                    </span>
 
-                <div>
-                    <label>За сколько напомнить?</label>
-                    <CustomDropdownInput
-                        options={reminderOptions}
-                        value={reminderBefore}
-                        onChange={(value) => setReminderData(prev => ({ ...prev, reminderBefore: value }))}
-                        placeholder="Введите или выберите время"
-                    />
-                </div>
-
-                <div>
-                    <label>Сколько раз напомнить?</label>
-                    <CustomInput
-                        type="number"
-                        value={repeatCount}
-                        onChange={(e) => {
-                            const inputValue = e.target.value;
-                            setReminderData(prev => ({ ...prev, repeatCount: Math.max(0, inputValue) }));
-                        }}
-                        min="0"
-                        className="custom-input"
-                        required
-                    />
+                    <span className={'custom-count-container'}>
+                        <label>Сколько раз напомнить?</label>
+                        <CustomInput
+                            type="number"
+                            value={repeatCount}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                setReminderData(prev => ({...prev, repeatCount: Math.max(0, inputValue)}));
+                            }}
+                            min="0"
+                            className="custom-input"
+                            required
+                        />
+                    </span>
                 </div>
 
                 <div>
@@ -162,7 +176,7 @@ const FriendReminder = () => {
                     <CustomInput
                         type="textarea"
                         value={comment}
-                        onChange={(e) => setReminderData(prev => ({ ...prev, comment: e.target.value }))}
+                        onChange={(e) => setReminderData(prev => ({...prev, comment: e.target.value}))}
                         placeholder="Введите комментарий (необязательно)"
                         className="custom-input-textarea"
                     />
