@@ -7,16 +7,15 @@ import './FriendReminder.css';
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
 
-
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
 
 const FriendReminder = () => {
     const { reminderData, setReminderData } = useContext(ReminderContext);
-    const navigate = useNavigate(); // Переместим использование navigate выше.
+    const navigate = useNavigate();
 
     const {
-        user,
-        selectedFriend,
+        user, // текущий пользователь
+        selectedFriend, // друг, которому создается напоминание
         reminderText,
         reminderDate,
         reminderTime,
@@ -32,6 +31,7 @@ const FriendReminder = () => {
     useEffect(() => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
+            // Устанавливаем текущего пользователя
             setReminderData(prev => ({ ...prev, user: webAppUser }));
         }
     }, [setReminderData]);
@@ -43,11 +43,27 @@ const FriendReminder = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Здесь вы можете добавить логику, если хотите сохранить выбранного друга
         if (selectedFriend && !friendsList.includes(selectedFriend)) {
             const updatedFriendsList = [...friendsList, selectedFriend];
             setReminderData(prev => ({ ...prev, friendsList: updatedFriendsList }));
             localStorage.setItem('friendsList', JSON.stringify(updatedFriendsList));
         }
+
+        // Подготовка данных для отправки
+        const reminderDetails = {
+            creator: user, // Пользователь, создающий напоминание
+            friend: selectedFriend, // Друг, которому создается напоминание
+            reminderText,
+            reminderDate,
+            reminderTime,
+            repeatCount,
+            reminderBefore,
+            comment
+        };
+
+        console.log(reminderDetails); // Для отладки
         navigate('/confirm');
     };
 
@@ -58,7 +74,7 @@ const FriendReminder = () => {
 
     const handleTimeChange = (e) => {
         console.log("Выбор времени:", e.target.value);
-        setReminderData(prev => ({ ...prev, reminderTime: e.target.value })); // Обновление времени
+        setReminderData(prev => ({ ...prev, reminderTime: e.target.value }));
     };
 
     const handleDateClick = () => {
@@ -120,7 +136,7 @@ const FriendReminder = () => {
                     <span className={'date-div'}>
                         <label>Когда событие?</label>
                         <CustomInput
-                            ref={dateInputRef} // Привязываем useRef к input даты
+                            ref={dateInputRef}
                             type="date"
                             value={reminderDate}
                             onChange={handleDateChange}
@@ -131,9 +147,9 @@ const FriendReminder = () => {
                         />
                     </span>
                     <span className={'time-div'}>
-                        <label>Во сколько событие?</label>
+                        <label>Во сколько?</label>
                         <CustomInput
-                            ref={timeInputRef} // Привязываем useRef к input времени
+                            ref={timeInputRef}
                             type="time"
                             value={reminderTime}
                             onChange={handleTimeChange}

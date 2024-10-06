@@ -128,7 +128,7 @@ const SelfReminder = () => {
                         />
                     </span>
                     <span className={'time-div'}>
-                        <label>Во сколько событие?</label>
+                        <label>Во сколько?</label>
                         <CustomInput
                             ref={timeInputRef}
                             type="time"
