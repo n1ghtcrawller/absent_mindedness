@@ -31,7 +31,7 @@ const SelfReminder = () => {
     useEffect(() => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
-
+            console.log("User photo URL:", webAppUser?.photo_url);
             // Set user information and selectedFriend
             setReminderData(prev => ({
                 ...prev,
