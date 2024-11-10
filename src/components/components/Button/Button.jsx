@@ -4,10 +4,10 @@ import './Button.css'
 const Button = ({ label, onClick, style, className, disabled }) => {
     return (
         <button
-            onClick={onClick} // Передаём функцию, которая будет срабатывать при клике
-            style={style}      // Применяем стили, если они переданы
-            className={className} // Класс для стилизации через CSS
-            disabled={disabled}  // Возможность отключения кнопки
+            onClick={onClick}
+            style={style}
+            className={className}
+            disabled={disabled}
         >
             {label}
         </button>

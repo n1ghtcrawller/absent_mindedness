@@ -21,7 +21,7 @@ const Confirm = () => {
         reminderDate,
         reminderTime,
         comment,
-        friend
+        selectedFriend
     } = reminderData;
 
     return (
@@ -35,7 +35,7 @@ const Confirm = () => {
                     <p><strong>Дата:</strong> {reminderDate}</p>
                     <p><strong>Время:</strong> {reminderTime}</p>
                     <p><strong>Комментарий:</strong> {comment || 'Нет'}</p>
-                    <p><strong>Кому:</strong> {friend}</p>
+                    <p><strong>Кому:</strong> {selectedFriend}</p>
                     <button onClick={handleSubmit}>Отправить</button>
                 </>
             )}
