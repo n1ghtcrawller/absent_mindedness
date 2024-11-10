@@ -12,11 +12,11 @@ const Confirm = () => {
     const navigate = useNavigate();
 
     const handleSubmit = () => {
-        setIsDuckVisible(true); // Показать утенка и скрыть текст
+        setIsDuckVisible(true);
     };
 
     const {
-        creator,
+        user,
         reminderText,
         reminderDate,
         reminderTime,
@@ -30,7 +30,7 @@ const Confirm = () => {
             {!isDuckVisible && (
                 <>
                     <h2>Подтверждение напоминания</h2>
-                    <p><strong>Кто:</strong> {creator}</p>
+                    <p><strong>Кто:</strong> {user}</p>
                     <p><strong>Напоминание:</strong> {reminderText}</p>
                     <p><strong>Дата:</strong> {reminderDate}</p>
                     <p><strong>Время:</strong> {reminderTime}</p>
