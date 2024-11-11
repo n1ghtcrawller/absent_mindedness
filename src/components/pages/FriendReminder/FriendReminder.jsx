@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useContext } from 'react';
 import { ReminderContext } from '../../components/ReminderContext/ReminderContext';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
-import "react-datepicker/dist/react-datepicker.css";
 import './FriendReminder.css';
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
@@ -54,7 +53,7 @@ const FriendReminder = () => {
         // Подготовка данных для отправки
         const reminderDetails = {
             creator: `${user?.first_name} ${user?.last_name || ''}`, // Полное имя создателя
-            friend: selectedFriend, // Друг, которому создается напоминание
+            friend: selectedFriend,
             reminderText,
             reminderDate,
             reminderTime,
@@ -63,7 +62,7 @@ const FriendReminder = () => {
             comment
         };
 
-        setReminderData(prev => ({ ...prev, ...reminderDetails })); // Установите данные напоминания в контекст
+        setReminderData(prev => ({ ...prev, ...reminderDetails }));
         navigate('/confirm'); // Переход на страницу подтверждения
     };
 

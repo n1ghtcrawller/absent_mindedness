@@ -27,7 +27,6 @@ const SelfReminder = () => {
     const dateInputRef = useRef(null);
     const timeInputRef = useRef(null);
 
-    // Получение данных пользователя
     useEffect(() => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
@@ -44,19 +43,19 @@ const SelfReminder = () => {
     // Обработка отправки формы
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log({
-            user,
+        const reminderDetails = {
+            creator: `${user?.first_name} ${user?.last_name || ''}`, // Полное имя создателя
+            friend: selectedFriend,
             reminderText,
-            eventDate: reminderDate,
+            reminderDate,
             reminderTime,
             repeatCount,
             reminderBefore,
-            comment,
-            selectedFriend // Log selectedFriend
-        });
+            comment
+        };
 
-        // Навигация на страницу подтверждения
-        navigate('/confirm');
+        setReminderData(prev => ({ ...prev, ...reminderDetails }));
+        navigate('/confirm'); // Переход на страницу подтверждения
     };
 
     const handleDateChange = (e) => {

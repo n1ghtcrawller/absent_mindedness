@@ -29,7 +29,7 @@ const Confirm = () => {
             <BackButton />
             {!isDuckVisible && (
                 <>
-                    <h2>Подтверждение напоминания</h2>
+                    <p>Подтверждение напоминания</p>
                     <p><strong>Кто:</strong> {creator}</p>
                     <p><strong>Напоминание:</strong> {reminderText}</p>
                     <p><strong>Дата:</strong> {reminderDate}</p>
