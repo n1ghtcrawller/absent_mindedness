@@ -21,7 +21,6 @@ const SelfReminder = () => {
         repeatCount,
         reminderBefore,
         comment,
-        selectedFriend,
     } = reminderData;
 
     const dateInputRef = useRef(null);
@@ -45,7 +44,7 @@ const SelfReminder = () => {
         e.preventDefault();
         const reminderDetails = {
             creator: `${user?.first_name} ${user?.last_name || ''}`, // Полное имя создателя
-            friend: selectedFriend,
+            friend: `${user?.first_name} ${user?.last_name || ''}`,
             reminderText,
             reminderDate,
             reminderTime,
@@ -55,7 +54,7 @@ const SelfReminder = () => {
         };
 
         setReminderData(prev => ({ ...prev, ...reminderDetails }));
-        navigate('/confirm'); // Переход на страницу подтверждения
+        navigate('/confirm');
     };
 
     const handleDateChange = (e) => {
