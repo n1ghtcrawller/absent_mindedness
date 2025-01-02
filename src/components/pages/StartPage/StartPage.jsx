@@ -7,8 +7,10 @@ import phone from '../../assets/phone.svg'
 
 const StartPage = () => {
     const navigate = useNavigate();
+    window.Telegram.WebApp.BackButton.show();
     const handleButtonClick = () => {
     navigate('main_page');
+
     };
 
     return (

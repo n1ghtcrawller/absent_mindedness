@@ -12,6 +12,9 @@ const reminderCritical = ["Незначительный", "Низкий", "Ср�
 const FriendReminder = () => {
     const { reminderData, setReminderData } = useContext(ReminderContext);
     const navigate = useNavigate();
+    const handleInviteClick = () => {
+        navigate('/invite_friend');
+    };
 
     const {
         user,
@@ -154,6 +157,15 @@ const FriendReminder = () => {
                         placeholder="Введите Имя или @user_id"
                         required
                     />
+                    <p className="development-note" style={{fontSize: 'small', color: '#888'}}>
+                        Если вашего друга нет в списке,{' '}
+                        <span
+                            onClick={handleInviteClick}
+                            style={{color: '#007bff', textDecoration: 'underline', cursor: 'pointer'}}
+                        >
+                пригласите его!
+            </span>
+                    </p>
                 </div>
 
                 <div>

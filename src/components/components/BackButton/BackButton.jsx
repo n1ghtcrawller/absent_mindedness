@@ -6,11 +6,10 @@ const BackButton = () => {
     useEffect(() => {
         // Проверяем, доступен ли объект Telegram
         if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.BackButton.show(); // Показываем кнопку "Назад"
+            window.Telegram.WebApp.BackButton.show();
 
             // Обработчик события нажатия на кнопку "Назад"
             const handleBackClick = () => {
-                // Здесь вы можете добавить логику, которая будет выполняться при нажатии на кнопку "Назад"
                 window.history.back(); // Возвращает на предыдущую страницу
             };
 
