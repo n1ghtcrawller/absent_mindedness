@@ -6,12 +6,10 @@ const CustomDropdownInput = ({ options, value, onChange, placeholder, isDisabled
     const [filteredOptions, setFilteredOptions] = useState(options);
     const [isOpen, setIsOpen] = useState(false);
 
-    // Обработка ввода в инпут
     const handleInputChange = (e) => {
         const input = e.target.value;
         setInputValue(input);
         setIsOpen(true);
-        // Фильтрация вариантов на основе введенного текста
         setFilteredOptions(
             options.filter((option) =>
                 option.toLowerCase().includes(input.toLowerCase())

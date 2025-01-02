@@ -5,23 +5,31 @@ import duckGif from './duck.gif';
 import BackButton from "../../components/BackButton/BackButton";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const Confirm = () => {
     const { reminderData } = useContext(ReminderContext);
     const [isDuckVisible, setIsDuckVisible] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = () => {
-        setIsDuckVisible(true); // Показать утенка и скрыть текст
+    const handleSubmit = async () => {
+        setIsDuckVisible(true);
+        try {
+            const response = await axios.post('/api/create_reminder', reminderData);
+            console.log("Reminder created successfully:", response.data);
+        } catch (error) {
+            console.error("Error creating reminder:", error);
+        }
     };
 
     const {
         creator,
         reminderText,
+        critically,
         reminderDate,
         reminderTime,
         comment,
-        friend
+        friend,
     } = reminderData;
 
     return (
@@ -32,6 +40,7 @@ const Confirm = () => {
                     <p>Подтверждение напоминания</p>
                     <p><strong>Кто:</strong> {creator}</p>
                     <p><strong>Напоминание:</strong> {reminderText}</p>
+                    <p><strong>Критичность:</strong> {critically}</p>
                     <p><strong>Дата:</strong> {reminderDate}</p>
                     <p><strong>Время:</strong> {reminderTime}</p>
                     <p><strong>Комментарий:</strong> {comment || 'Нет'}</p>

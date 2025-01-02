@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef } from 'react';
+import React, { useEffect, useContext, useRef, useState } from 'react';
 import { ReminderContext } from '../../components/ReminderContext/ReminderContext';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
@@ -8,6 +8,7 @@ import './SelfReminder.css';
 import BackButton from "../../components/BackButton/BackButton";
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
+const reminderCritical = ["Незначительный", "Низкий", "Средний", "Высокий", "Высший"];
 
 const SelfReminder = () => {
     const { reminderData, setReminderData } = useContext(ReminderContext);
@@ -16,12 +17,15 @@ const SelfReminder = () => {
     const {
         user,
         reminderText,
+        critically,
         reminderDate,
         reminderTime,
         repeatCount,
         reminderBefore,
         comment,
     } = reminderData;
+
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const dateInputRef = useRef(null);
     const timeInputRef = useRef(null);
@@ -30,16 +34,28 @@ const SelfReminder = () => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
             console.log("User photo URL:", webAppUser?.photo_url);
-            // Set user information and selectedFriend
             setReminderData(prev => ({
                 ...prev,
-                user: webAppUser || null, // Set user info or null
-                selectedFriend: webAppUser ? webAppUser.username : null, // Set selectedFriend to username or null
+                user: webAppUser || null,
+                selectedFriend: webAppUser ? webAppUser.username : null,
             }));
         }
     }, [setReminderData]);
 
-    // Обработка отправки формы
+    const checkFormValidity = () => {
+        if (
+            reminderText &&
+            reminderDate &&
+            reminderTime &&
+            critically &&
+            repeatCount > 0
+        ) {
+            setIsFormValid(true);
+        } else {
+            setIsFormValid(false);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const reminderDetails = {
@@ -48,9 +64,10 @@ const SelfReminder = () => {
             reminderText,
             reminderDate,
             reminderTime,
+            critically,
             repeatCount,
             reminderBefore,
-            comment
+            comment,
         };
 
         setReminderData(prev => ({ ...prev, ...reminderDetails }));
@@ -58,13 +75,34 @@ const SelfReminder = () => {
     };
 
     const handleDateChange = (e) => {
-        console.log("Выбор даты:", e.target.value);
         setReminderData(prev => ({ ...prev, reminderDate: e.target.value }));
+        checkFormValidity();
     };
 
     const handleTimeChange = (e) => {
-        console.log("Выбор времени:", e.target.value);
         setReminderData(prev => ({ ...prev, reminderTime: e.target.value }));
+        checkFormValidity();
+    };
+
+    const handleReminderTextChange = (e) => {
+        setReminderData(prev => ({ ...prev, reminderText: e.target.value }));
+        checkFormValidity();
+    };
+
+    const handleCriticalChange = (e) => {
+        setReminderData(prev => ({ ...prev, critically: e }));
+        checkFormValidity();
+    };
+
+    const handleRepeatCountChange = (e) => {
+        const inputValue = e.target.value;
+        setReminderData(prev => ({ ...prev, repeatCount: Math.max(0, inputValue) }));
+        checkFormValidity();
+    };
+
+    const handleCommentChange = (e) => {
+        setReminderData(prev => ({ ...prev, comment: e.target.value }));
+        checkFormValidity();
     };
 
     const handleDateClick = () => {
@@ -104,9 +142,20 @@ const SelfReminder = () => {
                     <CustomInput
                         type="text"
                         value={reminderText}
-                        onChange={(e) => setReminderData(prev => ({...prev, reminderText: e.target.value}))}
+                        onChange={handleReminderTextChange}
                         placeholder="Введите описание напоминания"
                         className="custom-input"
+                        required
+                    />
+                </div>
+                <div className={'critically'}>
+                    <label>Критичность</label>
+                    <CustomDropdownInput
+                        options={reminderCritical}
+                        value={critically}
+                        onChange={handleCriticalChange}
+                        placeholder="Насколько критично"
+                        className="custom-date"
                         required
                     />
                 </div>
@@ -146,11 +195,10 @@ const SelfReminder = () => {
                         <CustomDropdownInput
                             options={reminderOptions}
                             value={reminderBefore}
-                            onChange={(value) => setReminderData(prev => ({...prev, reminderBefore: value}))}
                             placeholder="Выберите время"
                             className="custom-date"
                             isDisabled={true}
-
+                            // required
                         />
                     </span>
 
@@ -159,14 +207,11 @@ const SelfReminder = () => {
                         <CustomInput
                             type="number"
                             value={repeatCount}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                setReminderData(prev => ({...prev, repeatCount: Math.max(0, inputValue)}));
-                            }}
+                            onChange={handleRepeatCountChange}
                             min="0"
                             className="custom-input"
-                            required
                             isDisabled={true}
+                            // required
                         />
                     </span>
                 </div>
@@ -179,13 +224,13 @@ const SelfReminder = () => {
                     <CustomInput
                         type="textarea"
                         value={comment}
-                        onChange={(e) => setReminderData(prev => ({...prev, comment: e.target.value}))}
+                        onChange={handleCommentChange}
                         placeholder="Введите комментарий (необязательно)"
                         className="custom-input-textarea"
                     />
                 </div>
 
-                <button type="submit">Создать напоминание</button>
+                <button type="submit" disabled={!isFormValid}>Создать напоминание</button>
             </form>
         </div>
     );

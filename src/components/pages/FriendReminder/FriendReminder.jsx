@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, {useEffect, useRef, useContext, useState} from 'react';
 import { ReminderContext } from '../../components/ReminderContext/ReminderContext';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
@@ -7,16 +7,18 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
+const reminderCritical = ["Незначительный", "Низкий", "Средний", "Высокий", "Высший"]
 
 const FriendReminder = () => {
     const { reminderData, setReminderData } = useContext(ReminderContext);
     const navigate = useNavigate();
 
     const {
-        user, // текущий пользователь
-        selectedFriend, // друг, которому создается напоминание
+        user,
+        selectedFriend,
         reminderText,
         reminderDate,
+        critically,
         reminderTime,
         repeatCount,
         reminderBefore,
@@ -26,6 +28,22 @@ const FriendReminder = () => {
 
     const dateInputRef = useRef(null);
     const timeInputRef = useRef(null);
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    const checkFormValidity = () => {
+        if (
+            reminderText &&
+            reminderDate &&
+            reminderTime &&
+            critically &&
+            repeatCount > 0
+        ) {
+            setIsFormValid(true);
+        } else {
+            setIsFormValid(false);
+        }
+    };
+
 
     useEffect(() => {
         if (window.Telegram?.WebApp) {
@@ -42,21 +60,18 @@ const FriendReminder = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // Здесь вы можете добавить логику, если хотите сохранить выбранного друга
         if (selectedFriend && !friendsList.includes(selectedFriend)) {
             const updatedFriendsList = [...friendsList, selectedFriend];
             setReminderData(prev => ({ ...prev, friendsList: updatedFriendsList }));
             localStorage.setItem('friendsList', JSON.stringify(updatedFriendsList));
         }
-
-        // Подготовка данных для отправки
         const reminderDetails = {
             creator: `${user?.first_name} ${user?.last_name || ''}`, // Полное имя создателя
             friend: selectedFriend,
             reminderText,
             reminderDate,
             reminderTime,
+            critically,
             repeatCount,
             reminderBefore,
             comment
@@ -67,13 +82,34 @@ const FriendReminder = () => {
     };
 
     const handleDateChange = (e) => {
-        console.log("Выбор даты:", e.target.value);
         setReminderData(prev => ({ ...prev, reminderDate: e.target.value }));
+        checkFormValidity();
     };
 
     const handleTimeChange = (e) => {
-        console.log("Выбор времени:", e.target.value);
         setReminderData(prev => ({ ...prev, reminderTime: e.target.value }));
+        checkFormValidity();
+    };
+
+    const handleReminderTextChange = (e) => {
+        setReminderData(prev => ({ ...prev, reminderText: e.target.value }));
+        checkFormValidity();
+    };
+
+    const handleCriticalChange = (e) => {
+        setReminderData(prev => ({ ...prev, critically: e}));
+        checkFormValidity();
+    };
+
+    const handleRepeatCountChange = (e) => {
+        const inputValue = e.target.value;
+        setReminderData(prev => ({ ...prev, repeatCount: Math.max(0, inputValue) }));
+        checkFormValidity();
+    };
+
+    const handleCommentChange = (e) => {
+        setReminderData(prev => ({ ...prev, comment: e.target.value }));
+        checkFormValidity();
     };
 
     const handleDateClick = () => {
@@ -116,6 +152,7 @@ const FriendReminder = () => {
                         value={selectedFriend}
                         onChange={(value) => setReminderData(prev => ({...prev, selectedFriend: value}))}
                         placeholder="Введите Имя или @user_id"
+                        required
                     />
                 </div>
 
@@ -124,10 +161,20 @@ const FriendReminder = () => {
                     <CustomInput
                         type="text"
                         value={reminderText}
-                        onChange={(e) => setReminderData(prev => ({...prev, reminderText: e.target.value}))}
+                        onChange={handleReminderTextChange}
                         placeholder="Введите описание напоминания"
                         className="custom-input"
                         required
+                    />
+                </div>
+                <div className={'critically'}>
+                    <label>Критичность</label>
+                    <CustomDropdownInput
+                        options={reminderCritical}
+                        value={critically}
+                        onChange={handleCriticalChange}
+                        placeholder="Насколько критично"
+                        className="custom-date"
                     />
                 </div>
 
@@ -166,7 +213,6 @@ const FriendReminder = () => {
                         <CustomDropdownInput
                             options={reminderOptions}
                             value={reminderBefore}
-                            onChange={(value) => setReminderData(prev => ({...prev, reminderBefore: value}))}
                             placeholder="Выберите время"
                             className="custom-date"
                             isDisabled={true}
@@ -178,10 +224,7 @@ const FriendReminder = () => {
                         <CustomInput
                             type="number"
                             value={repeatCount}
-                            onChange={(e) => {
-                                const inputValue = e.target.value;
-                                setReminderData(prev => ({...prev, repeatCount: Math.max(0, inputValue)}));
-                            }}
+                            onChange={handleRepeatCountChange}
                             min="0"
                             className="custom-input"
                             required
@@ -199,13 +242,13 @@ const FriendReminder = () => {
                     <CustomInput
                         type="textarea"
                         value={comment}
-                        onChange={(e) => setReminderData(prev => ({...prev, comment: e.target.value}))}
+                        onChange={handleCommentChange}
                         placeholder="Введите комментарий (необязательно)"
                         className="custom-input-textarea"
                     />
                 </div>
 
-                <button type="submit">Создать напоминание</button>
+                <button type="submit" disabled={!isFormValid}>Создать напоминание</button>
             </form>
         </div>
     );
