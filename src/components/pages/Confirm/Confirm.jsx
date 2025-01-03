@@ -14,8 +14,19 @@ const Confirm = () => {
 
     const handleSubmit = async () => {
         setIsDuckVisible(true);
+
+        const dataToSend = {
+            user: reminderData.user,
+            selectedFriend: reminderData.selectedFriend,
+            reminderText: reminderData.reminderText,
+            reminderDate: reminderData.reminderDate,
+            reminderTime: reminderData.reminderTime,
+            comment: reminderData.comment,
+            critically: reminderData.critically,
+        };
+
         try {
-            const response = await axios.post('/api/create_reminder', reminderData);
+            const response = await axios.post('keybasicsneutral.ru/api/create_reminder', dataToSend);
             console.log("Reminder created successfully:", response.data);
         } catch (error) {
             console.error("Error creating reminder:", error);
