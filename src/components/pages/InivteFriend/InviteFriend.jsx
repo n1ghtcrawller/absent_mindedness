@@ -1,42 +1,42 @@
 import React, { useState } from 'react';
 import './InviteFriend.css';
 import Button from "../../components/Button/Button";
-import axios from 'axios';
 
 const InviteFriend = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
 
     const handleSendInvite = async () => {
-        setError(null);
-        setStatus(useState(false))
+        setError(null); // Сброс ошибки перед новой попыткой
+        setSuccessMessage(null); // Сброс успешного сообщения перед новой попыткой
+        setLoading(true); // Включение индикатора загрузки
 
         try {
-            const messageId = 'your_prepared_message_id';
+            const messageId = 'your_prepared_message_id'; // Укажите реальный ID сообщения
 
+            // Вызов метода shareMessage
             Telegram.WebApp.shareMessage(
                 messageId,
                 (isSent) => {
                     if (isSent) {
-                        console.log('Message shared successfully!');
-                        alert('Приглашение отправлено!');
+                        setSuccessMessage('Сообщение успешно отправлено!'); // Успешное уведомление
                     } else {
-                        throw new Error('Ошибка отправки приглашения');
+                        setError('Не удалось отправить сообщение. Попробуйте еще раз.'); // Сообщение об ошибке
                     }
                 }
             );
         } catch (error) {
-            setError(error.message);
-            console.error('Error sending invite:', error);
-            alert('Произошла ошибка при отправке приглашения');
+            setError('Произошла ошибка: ' + error.message); // Отображение ошибки
         } finally {
-            setLoading(false);
+            setLoading(false); // Выключение индикатора загрузки
         }
     };
 
     return (
         <div className="invite-friend-container">
-            {error && <div className="error-message">{error}</div>}
+            {error && <div className="error-message">{error}</div>} {/* Блок отображения ошибок */}
+            {successMessage && <div className="success-message">{successMessage}</div>} {/* Блок успешного сообщения */}
             <Button
                 label={loading ? 'Отправка...' : 'Пригласить'}
                 onClick={handleSendInvite}
