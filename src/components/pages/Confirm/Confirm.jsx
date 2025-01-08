@@ -28,7 +28,7 @@ const Confirm = () => {
         };
 
         try {
-            const response = await axios.post('https://ab-mind.ru/api/api/create_reminder', dataToSend);
+            const response = await axios.post('https://ab-mind.ru/api/create_reminder', dataToSend);
             console.log("Reminder created successfully:", response.data);
         } catch (error) {
             console.error("Error creating reminder:", error);
