@@ -9,7 +9,7 @@ const MyReminders = () => {
         if (webAppUser) {
             const fetchReminders = async () => {
                 try {
-                    const response = await fetch(`http://94.26.236.100:8001/api/get_reminders/${webAppUser.id}`, {
+                    const response = await fetch(`https://ab-mind.ru/api/get_reminders/${webAppUser.id}`, {
                         headers: {
                             'Accept': 'application/json'
                         }
