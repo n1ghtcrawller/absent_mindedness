@@ -32,8 +32,8 @@ const Confirm = () => {
             console.log("Reminder created successfully:", response.data);
         } catch (error) {
             console.error("Error creating reminder:", error);
-            setIsDuckVisible(false); // Скрываем "Утку", если произошла ошибка
-            setErrorMessage('Ошибка при создании напоминания. Попробуйте ещё раз.');
+            setIsDuckVisible(false);
+            setErrorMessage('Ошибка при создании напоминания. Попробуйте ещё раз.', error);
         }
     };
 
