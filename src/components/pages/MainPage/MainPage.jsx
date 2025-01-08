@@ -16,6 +16,9 @@ const MainPage = () => {
         // Здесь можно добавить логику для перехода на страницу создания напоминания для другого пользователя
         navigate('/friend_reminder');
     };
+    const handleMyReminders = () => {
+        navigate('my_reminders');
+    }
 
     return (
         <div className="main-page-container">
@@ -39,6 +42,14 @@ const MainPage = () => {
                 <Button
                     label="Напомнить другу"
                     onClick={handleRemindOthers}
+                    className="remind-button"
+                    style={{ margin: '10px' }}
+                />
+            </div>
+            <div className="button-group">
+                <Button
+                    label="Мои напоминания"
+                    onClick={handleMyReminders}
                     className="remind-button"
                     style={{ margin: '10px' }}
                 />

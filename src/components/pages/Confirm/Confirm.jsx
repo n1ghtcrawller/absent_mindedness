@@ -26,7 +26,7 @@ const Confirm = () => {
         };
 
         try {
-            const response = await axios.post('keybasicsneutral.ru/api/create_reminder', dataToSend);
+            const response = await axios.post('http://94.26.236.100/api/create_reminder', dataToSend);
             console.log("Reminder created successfully:", response.data);
         } catch (error) {
             console.error("Error creating reminder:", error);

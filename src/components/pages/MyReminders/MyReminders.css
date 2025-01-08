@@ -1,0 +1,38 @@
+.reminders-container {
+    width: 80%;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.reminders-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.reminders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.reminders-table th, .reminders-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.reminders-table th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.critical-row {
+    background-color: #ffcccc;
+}
+
+.no-reminders {
+    font-size: 18px;
+    color: #666;
+}
