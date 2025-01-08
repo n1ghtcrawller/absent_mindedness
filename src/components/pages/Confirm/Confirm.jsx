@@ -11,13 +11,11 @@ const Confirm = () => {
     const { reminderData } = useContext(ReminderContext);
     const [isDuckVisible, setIsDuckVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [sentData, setSentData] = useState(null); // Новый стейт для сохранения тела запроса
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
         setIsDuckVisible(true);
-        setErrorMessage('');
-        setSentData(null); // Сбрасываем ранее отправленные данные
+        setErrorMessage(''); // Сбрасываем сообщение об ошибке перед новым запросом
 
         const dataToSend = {
             user: reminderData.user,
@@ -29,15 +27,13 @@ const Confirm = () => {
             critically: reminderData.critically,
         };
 
-        setSentData(dataToSend);
-
         try {
             const response = await axios.post('https://ab-mind.ru/api/create_reminder', dataToSend);
             console.log("Reminder created successfully:", response.data);
         } catch (error) {
             console.error("Error creating reminder:", error);
             setIsDuckVisible(false);
-            setErrorMessage('Ошибка при создании напоминания. Попробуйте ещё раз.');
+            setErrorMessage('Ошибка при создании напоминания. Попробуйте ещё раз.', error);
         }
     };
 
@@ -64,6 +60,9 @@ const Confirm = () => {
                     <p><strong>Время:</strong> {reminderTime}</p>
                     <p><strong>Комментарий:</strong> {comment || 'Нет'}</p>
                     <p><strong>Кому:</strong> {friend}</p>
+                    <p><strong>запрос:</strong> {response}</p>
+                    {errorMessage && <p className="error-message">{errorMessage}</p>}
+                    <button onClick={handleSubmit}>Отправить</button>
                     {sentData && (
                         <div>
                             <p><strong>Отправляемые данные:</strong></p>
@@ -71,7 +70,6 @@ const Confirm = () => {
                         </div>
                     )}
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
-                    <button onClick={handleSubmit}>Отправить</button>
                 </>
             )}
 
