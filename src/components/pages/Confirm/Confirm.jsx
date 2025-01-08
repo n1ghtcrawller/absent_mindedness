@@ -38,7 +38,7 @@ const Confirm = () => {
     };
 
     const {
-        user,
+        creator,
         reminderText,
         critically,
         reminderDate,
@@ -51,18 +51,15 @@ const Confirm = () => {
         <div className="confirm-container">
             <BackButton />
             {!isDuckVisible && (
-                <>
+                <div>
                     <p>Подтверждение напоминания</p>
-                    <p><strong>Кто:</strong> {user}</p>
+                    <p><strong>Кто:</strong> {creator}</p>
                     <p><strong>Напоминание:</strong> {reminderText}</p>
                     <p><strong>Критичность:</strong> {critically}</p>
                     <p><strong>Дата:</strong> {reminderDate}</p>
                     <p><strong>Время:</strong> {reminderTime}</p>
                     <p><strong>Комментарий:</strong> {comment || 'Нет'}</p>
                     <p><strong>Кому:</strong> {friend}</p>
-                    <p><strong>запрос:</strong> {response}</p>
-                    {errorMessage && <p className="error-message">{errorMessage}</p>}
-                    <button onClick={handleSubmit}>Отправить</button>
                     {sentData && (
                         <div>
                             <p><strong>Отправляемые данные:</strong></p>
@@ -70,7 +67,8 @@ const Confirm = () => {
                         </div>
                     )}
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
-                </>
+                    <button onClick={handleSubmit}>Отправить</button>
+                </div>
             )}
 
             {isDuckVisible && (
