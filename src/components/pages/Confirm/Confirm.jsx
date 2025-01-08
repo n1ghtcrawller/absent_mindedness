@@ -60,6 +60,7 @@ const Confirm = () => {
                     <p><strong>Время:</strong> {reminderTime}</p>
                     <p><strong>Комментарий:</strong> {comment || 'Нет'}</p>
                     <p><strong>Кому:</strong> {friend}</p>
+                    <p><strong>запрос:</strong> {dataToSend}</p>
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
                     <button onClick={handleSubmit}>Отправить</button>
                 </>
