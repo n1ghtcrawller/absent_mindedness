@@ -36,3 +36,22 @@
     font-size: 18px;
     color: #666;
 }
+.minor-row {
+    background-color: #e6f7e6; /* Светло-зелёный */
+}
+
+.low-row {
+    background-color: #f0f4c3; /* Светло-жёлтый */
+}
+
+.medium-row {
+    background-color: #ffe4b3; /* Светло-оранжевый */
+}
+
+.high-row {
+    background-color: #ffcccb; /* Светло-красный */
+}
+
+.critical-row {
+    background-color: #ff9999; /* Ярко-красный */
+}

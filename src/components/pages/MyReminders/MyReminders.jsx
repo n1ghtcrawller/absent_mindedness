@@ -30,6 +30,23 @@ const MyReminders = () => {
         }
     }, [webAppUser]);
 
+    const getRowClass = (critically) => {
+        switch (critically) {
+            case 'Незначительный':
+                return 'minor-row';
+            case 'Низкий':
+                return 'low-row';
+            case 'Средний':
+                return 'medium-row';
+            case 'Высокий':
+                return 'high-row';
+            case 'Высший':
+                return 'critical-row';
+            default:
+                return '';
+        }
+    };
+
     return (
         <div className="reminders-container">
             <h1 className="reminders-title">Мои Напоминания</h1>
@@ -46,7 +63,7 @@ const MyReminders = () => {
                     </thead>
                     <tbody>
                         {reminders.map(reminder => (
-                            <tr key={reminder.id} className={reminder.critically === 'Очень высокий' ? 'critical-row' : ''}>
+                            <tr key={reminder.id} className={getRowClass(reminder.critically)}>
                                 <td>{reminder.reminderText}</td>
                                 <td>{reminder.reminderDate}</td>
                                 <td>{reminder.reminderTime}</td>

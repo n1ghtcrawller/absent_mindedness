@@ -56,3 +56,8 @@ button:hover {
     font-weight: bold;
     color: var(--tg-theme-text-color);
 }
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-weight: bold;
+}
