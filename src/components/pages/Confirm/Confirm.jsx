@@ -11,13 +11,13 @@ const Confirm = () => {
     const { reminderData } = useContext(ReminderContext);
     const [isDuckVisible, setIsDuckVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const [sentData, setSentData] = useState(null); // Новый стейт для сохранения тела запроса
+    const [sentData, setSentData] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
         setIsDuckVisible(true);
         setErrorMessage('');
-        setSentData(null); // Сбрасываем ранее отправленные данные
+        setSentData(null);
 
         const dataToSend = {
             user: reminderData.user,
@@ -29,7 +29,9 @@ const Confirm = () => {
             critically: reminderData.critically,
         };
 
+        console.log("Preparing to send data:", dataToSend); // Проверка данных
         setSentData(dataToSend);
+        console.log("Sent Data set:", dataToSend); // Проверка sentData
 
         try {
             const response = await axios.post('https://ab-mind.ru/api/create_reminder', dataToSend);
@@ -40,6 +42,8 @@ const Confirm = () => {
             setErrorMessage('Ошибка при создании напоминания. Попробуйте ещё раз.');
         }
     };
+
+    console.log("Reminder Data from context:", reminderData); // Проверка reminderData
 
     const {
         user,
