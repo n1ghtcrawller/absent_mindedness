@@ -52,7 +52,7 @@ const Confirm = () => {
         reminderDate,
         reminderTime,
         comment,
-        friend,
+        selectedFriend,
     } = reminderData;
 
     return (
