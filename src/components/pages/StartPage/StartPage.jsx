@@ -1,21 +1,23 @@
-// Импортируем React и компонент Button
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '../../components/Button/Button';
 import './StartPage.css';
-import {useNavigate} from "react-router-dom";
-import phone from '../../assets/phone.svg'
+import { useNavigate } from "react-router-dom";
+import phone from '../../assets/phone.svg';
 
 const StartPage = () => {
     const navigate = useNavigate();
-    window.Telegram.WebApp.BackButton.isVisible(false);
-    const handleButtonClick = () => {
-    navigate('main_page');
 
+    useEffect(() => {
+        window.Telegram.WebApp.BackButton.hide();
+    }, []);
+
+    const handleButtonClick = () => {
+        navigate('main_page');
     };
 
     return (
         <div className={"StartPage"}>
-            <img src={phone}/>
+            <img src={phone} alt="phone" />
             <div className="AbMind">AbMind</div>
             <div className="AdMindDescription"
                  style={{ marginTop: '20px', padding: '10px 20px' }}
@@ -26,8 +28,8 @@ const StartPage = () => {
             <Button
                 label="Начать использовать"
                 onClick={handleButtonClick}
-                className="start-button" // Добавляем класс для стилизации кнопки
-                style={{ marginTop: '20px', padding: '10px 20px' }} // Пример инлайн стиля
+                className="start-button"
+                style={{ marginTop: '20px', padding: '10px 20px' }}
             />
         </div>
     );

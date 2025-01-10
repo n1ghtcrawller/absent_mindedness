@@ -1,14 +1,16 @@
 .reminders-container {
-    width: 80%;
+    width: 90%; /* Увеличиваем ширину контейнера для лучшего отображения */
+    max-width: 400px; /* Ограничиваем максимальную ширину */
     margin: 20px auto;
     font-family: Arial, sans-serif;
     text-align: center;
+    overflow-x: auto; /* Добавляем горизонтальную прокрутку при необходимости */
 }
 
 .reminders-title {
-    font-size: 24px;
+    font-size: 20px; /* Уменьшаем размер заголовка */
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Уменьшаем отступ */
 }
 
 .reminders-table {
@@ -18,24 +20,24 @@
 }
 
 .reminders-table th, .reminders-table td {
-    padding: 10px;
+    padding: 8px; /* Уменьшаем отступы в ячейках */
     border: 1px solid #ddd;
     text-align: left;
 }
 
 .reminders-table th {
-    background-color: #f4f4f4;
-    color: #333;
+    display: none; /* Убираем заголовки таблицы */
 }
 
 .critical-row {
-    background-color: #ffcccc;
+    background-color: #ff9999; /* Ярко-красный */
 }
 
 .no-reminders {
-    font-size: 18px;
+    font-size: 16px; /* Уменьшаем размер текста для более компактного вида */
     color: #666;
 }
+
 .minor-row {
     background-color: #e6f7e6; /* Светло-зелёный */
 }
@@ -50,8 +52,4 @@
 
 .high-row {
     background-color: #ffcccb; /* Светло-красный */
-}
-
-.critical-row {
-    background-color: #ff9999; /* Ярко-красный */
 }

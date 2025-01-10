@@ -53,15 +53,6 @@ const MyReminders = () => {
             <h1 className="reminders-title">Мои Напоминания</h1>
             {reminders.length > 0 ? (
                 <table className="reminders-table">
-                    <thead>
-                        <tr>
-                            <th>Текст</th>
-                            <th>Дата</th>
-                            <th>Время</th>
-                            <th>Комментарий</th>
-                            <th>Критичность</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         {reminders.map(reminder => (
                             <tr key={reminder.id} className={getRowClass(reminder.critically)}>
