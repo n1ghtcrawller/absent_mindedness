@@ -20,8 +20,8 @@ const Confirm = () => {
         setSentData(null);
 
         const dataToSend = {
-            user: reminderData.user,
-            selectedFriend: reminderData.selectedFriend,
+            user: reminderData.user.id,
+            selectedFriend: reminderData.selectedFriend.id,
             reminderText: reminderData.reminderText,
             reminderDate: reminderData.reminderDate,
             reminderTime: reminderData.reminderTime,
@@ -61,18 +61,18 @@ const Confirm = () => {
             {!isDuckVisible && (
                 <div>
                     <p>Подтверждение напоминания</p>
-                    <p><strong>Кто:</strong> { user}</p>
-                    <p><strong>Напоминание:</strong> { reminderText}</p>
-                    <p><strong>Критичность:</strong> { critically}</p>
-                    <p><strong>Дата:</strong> { reminderDate}</p>
-                    <p><strong>Время:</strong> { reminderTime}</p>
-                    <p><strong>Комментарий:</strong> { comment}</p>
-                    <p><strong>Кому:</strong> { friend}</p>
+                    <p><strong>Кто:</strong> {user.first_name} {user.last_name}</p>
+                    <p><strong>Напоминание:</strong> {reminderText}</p>
+                    <p><strong>Критичность:</strong> {critically ? 'Высокая' : 'Низкая'}</p>
+                    <p><strong>Дата:</strong> {reminderDate}</p>
+                    <p><strong>Время:</strong> {reminderTime}</p>
+                    <p><strong>Комментарий:</strong> {comment}</p>
+                    <p><strong>Кому:</strong> {selectedFriend.first_name} {selectedFriend.last_name}</p>
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
                     <button onClick={handleSubmit}>Отправить</button>
                 </div>
             )}
-
+    
             {isDuckVisible && (
                 <div className="duck-sent-container">
                     <img src={duckGif} alt="Telegram Duck" className="duck-gif" />
@@ -80,21 +80,8 @@ const Confirm = () => {
                     <Button onClick={() => navigate('/main_page')} label="На главную" />
                 </div>
             )}
-            
-            <div className="request-body">
-                <p><strong>Типы данных:</strong></p>
-                <ul>
-                    <li><strong>user:</strong> {typeof user}</li>
-                    <li><strong>reminderText:</strong> {typeof reminderText}</li>
-                    <li><strong>critically:</strong> {typeof critically}</li>
-                    <li><strong>reminderDate:</strong> {typeof reminderDate}</li>
-                    <li><strong>reminderTime:</strong> {typeof reminderTime}</li>
-                    <li><strong>comment:</strong> {typeof comment}</li>
-<li><strong>friend:</strong> {typeof friend}</li>
-</ul>
-</div>
-</div>
-);
+        </div>
+    );
 };
 
 export default Confirm;
