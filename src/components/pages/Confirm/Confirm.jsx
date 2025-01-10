@@ -53,7 +53,6 @@ const Confirm = () => {
         reminderTime,
         comment,
         friend,
-        body
     } = reminderData;
 
     return (
@@ -62,13 +61,13 @@ const Confirm = () => {
             {!isDuckVisible && (
                 <div>
                     <p>Подтверждение напоминания</p>
-                    <p><strong>Кто:</strong> {user}</p>
-                    <p><strong>Напоминание:</strong> {reminderText}</p>
-                    <p><strong>Критичность:</strong> {critically}</p>
-                    <p><strong>Дата:</strong> {reminderDate}</p>
-                    <p><strong>Время:</strong> {reminderTime}</p>
-                    <p><strong>Комментарий:</strong> {comment || 'Нет'}</p>
-                    <p><strong>Кому:</strong> {friend}</p>
+                    <p><strong>Кто:</strong> {typeof user}</p>
+                    <p><strong>Напоминание:</strong> {typeof reminderText}</p>
+                    <p><strong>Критичность:</strong> {typeof critically}</p>
+                    <p><strong>Дата:</strong> {typeof reminderDate}</p>
+                    <p><strong>Время:</strong> {typeof reminderTime}</p>
+                    <p><strong>Комментарий:</strong> {typeof comment}</p>
+                    <p><strong>Кому:</strong> {typeof friend}</p>
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
                     <button onClick={handleSubmit}>Отправить</button>
                 </div>
@@ -82,12 +81,21 @@ const Confirm = () => {
                 </div>
             )}
             
-            {/* Отображение тела запроса */}
+            {/* Отображение типов данных */}
             <div className="request-body">
-                <p><strong>Тело запроса:</strong> {body || 'Нет тела'}</p>
-            </div>
-        </div>
-    );
+                <p><strong>Типы данных:</strong></p>
+                <ul>
+                    <li><strong>user:</strong> {typeof user}</li>
+                    <li><strong>reminderText:</strong> {typeof reminderText}</li>
+                    <li><strong>critically:</strong> {typeof critically}</li>
+                    <li><strong>reminderDate:</strong> {typeof reminderDate}</li>
+                    <li><strong>reminderTime:</strong> {typeof reminderTime}</li>
+                    <li><strong>comment:</strong> {typeof comment}</li>
+<li><strong>friend:</strong> {typeof friend}</li>
+</ul>
+</div>
+</div>
+);
 };
 
 export default Confirm;
