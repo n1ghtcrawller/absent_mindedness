@@ -53,6 +53,7 @@ const Confirm = () => {
         reminderTime,
         comment,
         friend,
+        body
     } = reminderData;
 
     return (
@@ -68,12 +69,6 @@ const Confirm = () => {
                     <p><strong>Время:</strong> {reminderTime}</p>
                     <p><strong>Комментарий:</strong> {comment || 'Нет'}</p>
                     <p><strong>Кому:</strong> {friend}</p>
-                    {sentData && (
-                        <div>
-                            <p><strong>Отправляемые данные:</strong></p>
-                            <pre className="request-body">{JSON.stringify(sentData, null, 2)}</pre>
-                        </div>
-                    )}
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
                     <button onClick={handleSubmit}>Отправить</button>
                 </div>
@@ -86,6 +81,11 @@ const Confirm = () => {
                     <Button onClick={() => navigate('/main_page')} label="На главную" />
                 </div>
             )}
+            
+            {/* Отображение тела запроса */}
+            <div className="request-body">
+                <p><strong>Тело запроса:</strong> {body || 'Нет тела'}</p>
+            </div>
         </div>
     );
 };
