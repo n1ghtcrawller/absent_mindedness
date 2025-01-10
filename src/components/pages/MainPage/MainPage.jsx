@@ -17,7 +17,7 @@ const MainPage = () => {
         navigate('/friend_reminder');
     };
     const handleMyReminders = () => {
-        navigate('my_reminders');
+        navigate('/my_reminders');
     }
 
     return (
