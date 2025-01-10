@@ -5,15 +5,14 @@ export const ReminderContext = createContext();
 
 export const ReminderProvider = ({ children }) => {
     const [reminderData, setReminderData] = useState({
-        user: '',
-        selectedFriend: '',
+        user: null,
+        selectedFriend: null,
         reminderText: '',
         reminderDate: '',
         reminderTime: '',
         repeatCount: 3,
         reminderBefore: '30 минут',
         comment: '',
-        friendsList: []
     });
 
     return (

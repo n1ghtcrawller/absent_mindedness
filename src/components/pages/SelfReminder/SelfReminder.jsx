@@ -16,6 +16,7 @@ const SelfReminder = () => {
 
     const {
         user,
+        selectedFriend,
         reminderText,
         critically,
         reminderDate,
@@ -59,8 +60,8 @@ const SelfReminder = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const reminderDetails = {
-            creator: `${user?.first_name} ${user?.last_name || ''}`, // Полное имя создателя
-            friend: `${user?.first_name} ${user?.last_name || ''}`,
+            user: window.Telegram.WebApp.initDataUnsafe?.user?.id || 'unknown_user',
+            selectedFriend: window.Telegram.WebApp.initDataUnsafe?.user?.id || 'unknown_user',
             reminderText,
             reminderDate,
             reminderTime,

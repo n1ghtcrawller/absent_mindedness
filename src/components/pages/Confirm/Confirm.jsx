@@ -20,8 +20,8 @@ const Confirm = () => {
         setSentData(null);
 
         const dataToSend = {
-            user: reminderData.user.id,
-            selectedFriend: reminderData.selectedFriend.id,
+            user: reminderData.user,
+            selectedFriend: reminderData.selectedFriend,
             reminderText: reminderData.reminderText,
             reminderDate: reminderData.reminderDate,
             reminderTime: reminderData.reminderTime,
@@ -61,13 +61,13 @@ const Confirm = () => {
             {!isDuckVisible && (
                 <div>
                     <p>Подтверждение напоминания</p>
-                    <p><strong>Кто:</strong> {typeof user}</p>
-                    <p><strong>Напоминание:</strong> {typeof reminderText}</p>
-                    <p><strong>Критичность:</strong> {typeof critically}</p>
-                    <p><strong>Дата:</strong> {typeof reminderDate}</p>
-                    <p><strong>Время:</strong> {typeof reminderTime}</p>
-                    <p><strong>Комментарий:</strong> {typeof comment}</p>
-                    <p><strong>Кому:</strong> {typeof friend}</p>
+                    <p><strong>Кто:</strong> { user}</p>
+                    <p><strong>Напоминание:</strong> { reminderText}</p>
+                    <p><strong>Критичность:</strong> { critically}</p>
+                    <p><strong>Дата:</strong> { reminderDate}</p>
+                    <p><strong>Время:</strong> { reminderTime}</p>
+                    <p><strong>Комментарий:</strong> { comment}</p>
+                    <p><strong>Кому:</strong> { friend}</p>
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
                     <button onClick={handleSubmit}>Отправить</button>
                 </div>
@@ -81,7 +81,6 @@ const Confirm = () => {
                 </div>
             )}
             
-            {/* Отображение типов данных */}
             <div className="request-body">
                 <p><strong>Типы данных:</strong></p>
                 <ul>
