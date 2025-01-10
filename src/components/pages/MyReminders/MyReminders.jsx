@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './MyReminders.css';
-
+import BackButton from '../../components/BackButton/BackButton';
 const MyReminders = () => {
     const [reminders, setReminders] = useState([]);
     const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
@@ -49,6 +49,7 @@ const MyReminders = () => {
 
     return (
         <div className="reminders-container">
+            <BackButton/>
             <h1 className="reminders-title">Мои Напоминания</h1>
             {reminders.length > 0 ? (
                 <table className="reminders-table">

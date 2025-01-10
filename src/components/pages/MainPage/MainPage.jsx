@@ -5,15 +5,11 @@ import {useNavigate} from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
 const MainPage = () => {
     const navigate = useNavigate();
-    // Функция, которая сработает при выборе "Напомнить себе"
     const handleRemindSelf = () => {
         navigate('/self_reminder');
-        // Здесь можно добавить логику для перехода на страницу создания напоминания для себя
     };
 
-    // Функция, которая сработает при выборе "Напомнить другому"
     const handleRemindOthers = () => {
-        // Здесь можно добавить логику для перехода на страницу создания напоминания для другого пользователя
         navigate('/friend_reminder');
     };
     const handleMyReminders = () => {
