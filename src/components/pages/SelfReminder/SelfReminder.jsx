@@ -37,7 +37,7 @@ const SelfReminder = () => {
             setReminderData(prev => ({
                 ...prev,
                 user: webAppUser || null,
-                selectedFriend: webAppUser ? webAppUser.username : null,
+                selectedFriend: webAppUser || null,
             }));
         }
     }, [setReminderData]);

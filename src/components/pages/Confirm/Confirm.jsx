@@ -20,8 +20,8 @@ const Confirm = () => {
         setSentData(null);
 
         const dataToSend = {
-            user: reminderData.user,
-            selectedFriend: reminderData.selectedFriend,
+            user: reminderData.user.id,
+            selectedFriend: reminderData.selectedFriend.id,
             reminderText: reminderData.reminderText,
             reminderDate: reminderData.reminderDate,
             reminderTime: reminderData.reminderTime,
