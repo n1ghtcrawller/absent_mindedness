@@ -51,7 +51,6 @@ const FriendReminder = () => {
     useEffect(() => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
-            // Устанавливаем текущего пользователя
             setReminderData(prev => ({ ...prev, user: webAppUser }));
         }
     }, [setReminderData]);
@@ -81,7 +80,7 @@ const FriendReminder = () => {
         };
 
         setReminderData(prev => ({ ...prev, ...reminderDetails }));
-        navigate('/confirm'); // Переход на страницу подтверждения
+        navigate('/confirm');
     };
 
     const handleDateChange = (e) => {
