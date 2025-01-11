@@ -40,16 +40,20 @@
 
 .minor-row {
     background-color: #e6f7e6; /* Светло-зелёный */
+    color: black
 }
 
 .low-row {
     background-color: #f0f4c3; /* Светло-жёлтый */
+    color: black
 }
 
 .medium-row {
     background-color: #ffe4b3; /* Светло-оранжевый */
+    color: black
 }
 
 .high-row {
     background-color: #ffcccb; /* Светло-красный */
+    color: black
 }
