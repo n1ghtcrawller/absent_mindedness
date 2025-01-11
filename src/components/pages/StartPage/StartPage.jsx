@@ -13,37 +13,38 @@ const StartPage = () => {
 
         const user = window.Telegram.WebApp.initDataUnsafe.user;
         if (user) {
-            setUserData({
+            const userInfo = {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 user_id: user.id,
                 username: user.username,
-            });
+            };
+            setUserData(userInfo);
+
+            (async () => {
+                try {
+                    const response = await fetch('https://ab-mind.ru/api/add_user', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userInfo),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    console.log('Success:', data);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            })();
         }
     }, []);
 
-    const handleButtonClick = async () => {
-        if (userData) {
-            try {
-                const response = await fetch('https://ab-mind.ru/api/add_user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(userData),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                console.log('Success:', data);
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
+    const handleButtonClick = () => {
         // Навигация на главную страницу
         navigate('main_page');
     };
