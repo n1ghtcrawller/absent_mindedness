@@ -18,6 +18,7 @@ const StartPage = () => {
                 last_name: user.last_name,
                 user_id: user.id,
                 username: user.username,
+                photo_url: user.photo_url
             };
             setUserData(userInfo);
 
