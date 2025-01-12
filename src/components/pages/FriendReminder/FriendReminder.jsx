@@ -32,19 +32,28 @@ const FriendReminder = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('https://ab-mind.ru/api/get_users');
+            const response = await fetch('https://ab-mind.ru/api/get_users', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            console.log(await response.text()); // Покажет весь ответ;
+    
             const data = await response.json();
             const formattedData = data.map(user => ({
                 id: user.id,
                 displayName: `${user.first_name} ${user.last_name} (@${user.username})`,
                 username: user.username,
             }));
+    
             setReminderData(prev => ({ ...prev, friendsList: formattedData }));
             localStorage.setItem('friendsList', JSON.stringify(formattedData));
         } catch (error) {
             console.error("Ошибка при получении пользователей:", error);
         }
     };
+    
     const filterFriends = (query) => {
         const cachedFriends = JSON.parse(localStorage.getItem('friendsList')) || [];
         return cachedFriends.filter(friend =>
@@ -134,7 +143,7 @@ const FriendReminder = () => {
                 <div>
                     <label>Выберите друга</label>
                     <CustomDropdownInput
-                    friendsList={friendsList}
+                    friendsList={filterFriends}
                     onChange={(e) => handleInputChange('selectedFriend')(e)}
                     placeholder="Выберите друга"
                     />
