@@ -41,13 +41,10 @@ const FriendReminder = () => {
                 },
             });
             const data = await response.json();
-            const formattedData = data.map(user => `${user.first_name} ${user.last_name} (@${user.username})`);
-    
-            // Обновляем friendsList в reminderData
-            setReminderData(prev => ({ ...prev, friendsList: formattedData }));
-            localStorage.setItem('friendsList', JSON.stringify(formattedData));
+            setReminderData(prev => ({ ...prev, friendsList: data }));
+            localStorage.setItem('friendsList', JSON.stringify(data));
             setIsLoading(false);
-            console.log("Загруженный список друзей:", formattedData);
+            console.log("Загруженный список друзей:", data);
         } catch (error) {
             console.error("Ошибка при получении пользователей:", error);
             setIsLoading(false);
