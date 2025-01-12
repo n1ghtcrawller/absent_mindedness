@@ -67,7 +67,7 @@ const FriendReminder = () => {
     }, []);
 
     useEffect(() => {
-        console.log("Список друзей:", formattedFriendsList);
+        console.log("Список друзей который загружен:", formattedFriendsList);
     }, [formattedFriendsList]);
 
     useEffect(() => {
