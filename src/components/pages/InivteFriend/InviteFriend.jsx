@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './InviteFriend.css';
 import Button from "../../components/Button/Button";
+import BackButton from '../../components/BackButton/BackButton';
 
 const InviteFriend = () => {
     const [loading, setLoading] = useState(false);
@@ -35,6 +36,7 @@ const InviteFriend = () => {
 
     return (
         <div className="invite-friend-container">
+            <BackButton/>
             {error && <div className="error-message">{error}</div>} {/* Блок отображения ошибок */}
             {successMessage && <div className="success-message">{successMessage}</div>} {/* Блок успешного сообщения */}
             <Button
