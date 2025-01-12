@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './CustomDropDownInput.css';
 
-const CustomDropdownInput = ({ options, value, onChange, placeholder, isDisabled = false }) => {
+const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDisabled = false }) => {
     const [inputValue, setInputValue] = useState(value || '');
     const [filteredOptions, setFilteredOptions] = useState(options);
     const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +38,7 @@ const CustomDropdownInput = ({ options, value, onChange, placeholder, isDisabled
                 style={{
                     backgroundColor: isDisabled ? '#f0f0f0' : 'white',
                     color: isDisabled ? '#a0a0a0' : 'black',
-                    cursor: isDisabled ? 'not-allowed' : 'auto'
+                    cursor: isDisabled ? 'not-allowed' : 'auto',
                 }}
             />
             {isOpen && filteredOptions.length > 0 && !isDisabled && ( // Показываем список только если не отключен

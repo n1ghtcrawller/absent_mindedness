@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useContext, useState} from 'react';
+import React, { useEffect, useRef, useContext, useState } from 'react';
 import { ReminderContext } from '../../components/ReminderContext/ReminderContext';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDropDownInput';
@@ -7,68 +7,89 @@ import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
-const reminderCritical = ["Незначительный", "Низкий", "Средний", "Высокий", "Высший"]
+const reminderCritical = ["Незначительный", "Низкий", "Средний", "Высокий", "Высший"];
 
 const FriendReminder = () => {
     const { reminderData, setReminderData } = useContext(ReminderContext);
     const navigate = useNavigate();
-    const handleInviteClick = () => {
-        navigate('/invite_friend');
-    };
+
+    const [isFormValid, setIsFormValid] = useState(false);
+    const dateInputRef = useRef(null);
+    const timeInputRef = useRef(null);
 
     const {
         user,
         selectedFriend,
         reminderText,
         reminderDate,
-        critically,
         reminderTime,
+        critically,
         repeatCount,
         reminderBefore,
         comment,
-        friendsList
+        friendsList,
     } = reminderData;
 
-    const dateInputRef = useRef(null);
-    const timeInputRef = useRef(null);
-    const [isFormValid, setIsFormValid] = useState(false);
-
-    const checkFormValidity = () => {
-        if (
-            reminderText &&
-            reminderDate &&
-            reminderTime &&
-            critically &&
-            repeatCount > 0
-        ) {
-            setIsFormValid(true);
-        } else {
-            setIsFormValid(false);
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch('https://ab-mind.ru/api/get_users');
+            const data = await response.json();
+            const formattedData = data.map(user => ({
+                id: user.id,
+                displayName: `${user.first_name} ${user.last_name} (@${user.username})`,
+                username: user.username,
+            }));
+            setReminderData(prev => ({ ...prev, friendsList: formattedData }));
+            localStorage.setItem('friendsList', JSON.stringify(formattedData));
+        } catch (error) {
+            console.error("Ошибка при получении пользователей:", error);
         }
     };
+    const filterFriends = (query) => {
+        const cachedFriends = JSON.parse(localStorage.getItem('friendsList')) || [];
+        return cachedFriends.filter(friend =>
+            friend.displayName.toLowerCase().includes(query.toLowerCase())
+        );
+    };
 
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+    
 
     useEffect(() => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
-            setReminderData(prev => ({ ...prev, user: webAppUser }));
+            setReminderData((prev) => ({ ...prev, user: webAppUser }));
         }
     }, [setReminderData]);
 
     useEffect(() => {
         const cachedFriends = JSON.parse(localStorage.getItem('friendsList')) || [];
-        setReminderData(prev => ({ ...prev, friendsList: cachedFriends }));
+        setReminderData((prev) => ({ ...prev, friendsList: cachedFriends }));
     }, [setReminderData]);
+
+    useEffect(() => {
+        setIsFormValid(
+            !!reminderText &&
+            !!reminderDate &&
+            !!reminderTime &&
+            !!critically &&
+            repeatCount > 0
+        );
+    }, [reminderText, reminderDate, reminderTime, critically, repeatCount]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (selectedFriend && !friendsList.includes(selectedFriend)) {
             const updatedFriendsList = [...friendsList, selectedFriend];
-            setReminderData(prev => ({ ...prev, friendsList: updatedFriendsList }));
+            setReminderData((prev) => ({ ...prev, friendsList: updatedFriendsList }));
             localStorage.setItem('friendsList', JSON.stringify(updatedFriendsList));
         }
+
         const reminderDetails = {
-            creator: `${user?.first_name} ${user?.last_name || ''}`, // Полное имя создателя
+            creator: `${user?.first_name} ${user?.last_name || ''}`,
             friend: selectedFriend,
             reminderText,
             reminderDate,
@@ -76,54 +97,19 @@ const FriendReminder = () => {
             critically,
             repeatCount,
             reminderBefore,
-            comment
+            comment,
         };
 
-        setReminderData(prev => ({ ...prev, ...reminderDetails }));
+        setReminderData((prev) => ({ ...prev, ...reminderDetails }));
         navigate('/confirm');
     };
 
-    const handleDateChange = (e) => {
-        setReminderData(prev => ({ ...prev, reminderDate: e.target.value }));
-        checkFormValidity();
+    const handleInputChange = (field) => (value) => {
+        setReminderData((prev) => ({ ...prev, [field]: value }));
     };
 
-    const handleTimeChange = (e) => {
-        setReminderData(prev => ({ ...prev, reminderTime: e.target.value }));
-        checkFormValidity();
-    };
-
-    const handleReminderTextChange = (e) => {
-        setReminderData(prev => ({ ...prev, reminderText: e.target.value }));
-        checkFormValidity();
-    };
-
-    const handleCriticalChange = (e) => {
-        setReminderData(prev => ({ ...prev, critically: e}));
-        checkFormValidity();
-    };
-
-    const handleRepeatCountChange = (e) => {
-        const inputValue = e.target.value;
-        setReminderData(prev => ({ ...prev, repeatCount: Math.max(0, inputValue) }));
-        checkFormValidity();
-    };
-
-    const handleCommentChange = (e) => {
-        setReminderData(prev => ({ ...prev, comment: e.target.value }));
-        checkFormValidity();
-    };
-
-    const handleDateClick = () => {
-        if (dateInputRef.current) {
-            dateInputRef.current.focus();
-        }
-    };
-
-    const handleTimeClick = () => {
-        if (timeInputRef.current) {
-            timeInputRef.current.focus();
-        }
+    const handleInviteClick = () => {
+        navigate('/invite_friend');
     };
 
     return (
@@ -140,9 +126,7 @@ const FriendReminder = () => {
                         />
                         <div className="user-details">
                             <h3>{user.first_name} {user.last_name || ''}</h3>
-                            <div>
-                                @{user.username}
-                            </div>
+                            <div>@{user.username}</div>
                         </div>
                     </div>
                 )}
@@ -150,20 +134,18 @@ const FriendReminder = () => {
                 <div>
                     <label>Выберите друга</label>
                     <CustomDropdownInput
-                        options={friendsList}
-                        value={selectedFriend}
-                        onChange={(value) => setReminderData(prev => ({...prev, selectedFriend: value}))}
-                        placeholder="Введите Имя или @user_id"
-                        required
+                    friendsList={friendsList}
+                    onChange={(e) => handleInputChange('selectedFriend')(e)}
+                    placeholder="Выберите друга"
                     />
-                    <p className="development-note" style={{fontSize: 'small', color: '#888'}}>
+                    <p className="development-note" style={{ fontSize: 'small', color: '#888' }}>
                         Если вашего друга нет в списке,{' '}
                         <span
                             onClick={handleInviteClick}
-                            style={{color: '#007bff', textDecoration: 'underline', cursor: 'pointer'}}
+                            style={{ color: '#007bff', textDecoration: 'underline', cursor: 'pointer' }}
                         >
-                пригласите его!
-            </span>
+                            пригласите его!
+                        </span>
                     </p>
                 </div>
 
@@ -172,54 +154,51 @@ const FriendReminder = () => {
                     <CustomInput
                         type="text"
                         value={reminderText}
-                        onChange={handleReminderTextChange}
+                        onChange={(e) => handleInputChange('reminderText')(e.target.value)}
                         placeholder="Введите описание напоминания"
                         className="custom-input"
                         required
                     />
                 </div>
-                <div className={'critically'}>
+
+                <div className="critically">
                     <label>Критичность</label>
                     <CustomDropdownInput
                         options={reminderCritical}
                         value={critically}
-                        onChange={handleCriticalChange}
+                        onChange={(value) => handleInputChange('critically')(value)}
                         placeholder="Насколько критично"
                         className="custom-date"
                     />
                 </div>
 
                 <div className="custom-date-container">
-                    <span className={'date-div'}>
+                    <span className="date-div">
                         <label>Когда событие?</label>
                         <CustomInput
                             ref={dateInputRef}
                             type="date"
                             value={reminderDate}
-                            onChange={handleDateChange}
+                            onChange={(e) => handleInputChange('reminderDate')(e.target.value)}
                             className="custom-date"
                             required
-                            placeholder={"Выберите дату"}
-                            onClick={handleDateClick}
                         />
                     </span>
-                    <span className={'time-div'}>
+                    <span className="time-div">
                         <label>Во сколько?</label>
                         <CustomInput
                             ref={timeInputRef}
                             type="time"
                             value={reminderTime}
-                            onChange={handleTimeChange}
+                            onChange={(e) => handleInputChange('reminderTime')(e.target.value)}
                             className="custom-time"
                             required
-                            placeholder={"Выберите время"}
-                            onClick={handleTimeClick}
                         />
                     </span>
                 </div>
 
-                <div className={'custom-date-container'}>
-                    <span className={'custom-count-container'}>
+                <div className="custom-date-container">
+                    <span className="custom-count-container">
                         <label>За сколько напомнить?</label>
                         <CustomDropdownInput
                             options={reminderOptions}
@@ -230,12 +209,12 @@ const FriendReminder = () => {
                         />
                     </span>
 
-                    <span className={'custom-count-container'}>
+                    <span className="custom-count-container">
                         <label>Сколько раз напомнить?</label>
                         <CustomInput
                             type="number"
                             value={repeatCount}
-                            onChange={handleRepeatCountChange}
+                            onChange={(e) => handleInputChange('repeatCount')(Math.max(0, e.target.value))}
                             min="0"
                             className="custom-input"
                             required
@@ -243,9 +222,9 @@ const FriendReminder = () => {
                         />
                     </span>
                 </div>
-                <p className="development-note" style={{fontSize: 'small', color: '#888'}}>
-                    Функция ещё в разработке. Бот по умолчанию отправляет три напоминания за 3 часа, за 1 час и за 30
-                    минут.
+
+                <p className="development-note" style={{ fontSize: 'small', color: '#888' }}>
+                    Функция ещё в разработке. Бот по умолчанию отправляет три напоминания за 3 часа, за 1 час и за 30 минут.
                 </p>
 
                 <div>
@@ -253,7 +232,7 @@ const FriendReminder = () => {
                     <CustomInput
                         type="textarea"
                         value={comment}
-                        onChange={handleCommentChange}
+                        onChange={(e) => handleInputChange('comment')(e.target.value)}
                         placeholder="Введите комментарий (необязательно)"
                         className="custom-input-textarea"
                     />
