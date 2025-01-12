@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 .reminder-block {
@@ -20,20 +22,6 @@
 .reminder-details {
     margin-top: 10px;
     font-size: 1em;
-}
-
-.delete-button {
-    background-color: #ff4d4d;
-    color: white;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9em;
-}
-
-.delete-button:hover {
-    background-color: #e60000;
 }
 
 .no-reminders {

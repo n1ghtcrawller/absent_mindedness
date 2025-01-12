@@ -99,9 +99,9 @@ const MyReminders = () => {
                                     <p><strong>Комментарий:</strong> {reminder.comment}</p>
                                     <p><strong>Критичность:</strong> {reminder.critically}</p>
                                     <Button
-                                        label={"Удалить Напоминание"}
+                                        label={"Выполнено"}
                                         onClick={(e) => {
-                                            e.stopPropagation(); // Prevents closing details when clicking delete
+                                            e.stopPropagation();
                                             handleDeleteReminder(reminder.id);
                                         }}
                                     >
