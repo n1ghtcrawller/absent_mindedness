@@ -27,7 +27,7 @@ const FriendReminder = () => {
         repeatCount,
         reminderBefore,
         comment,
-        friendsList = [],
+        friendsList,
     } = reminderData;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -132,14 +132,18 @@ const FriendReminder = () => {
                     </div>
                 )}
 
-                <div>
-                    <label>Выберите друга</label>
+<div>
+                <label>Выберите друга</label>
+                {isLoading ? (
+                    <div>Загрузка...</div>  // Индикатор загрузки
+                ) : (
                     <CustomDropdownInput
-                    options={friendsList}
-                    onChange={(e) => handleInputChange('selectedFriend')(e)}
-                    placeholder="Выберите друга"
+                        friendsList={friendsList}
+                        onChange={(e) => handleInputChange('selectedFriend')(e)}
+                        placeholder="Выберите друга"
                     />
-                    <p className="development-note" style={{ fontSize: 'small', color: '#888' }}>
+                )}
+                <p className="development-note" style={{ fontSize: 'small', color: '#888' }}>
                         Если вашего друга нет в списке,{' '}
                         <span
                             onClick={handleInviteClick}
@@ -148,7 +152,7 @@ const FriendReminder = () => {
                             пригласите его!
                         </span>
                     </p>
-                </div>
+            </div>
 
                 <div>
                     <label>О чём напомнить?</label>
