@@ -144,7 +144,7 @@ const FriendReminder = () => {
                 <div>
                     <label>Выберите друга</label>
                     <CustomDropdownInput
-                    friendsList={filterFriends}
+                    friendsList={friendsList}
                     onChange={(e) => handleInputChange('selectedFriend')(e)}
                     placeholder="Выберите друга"
                     />
