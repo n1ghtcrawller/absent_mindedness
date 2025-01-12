@@ -193,13 +193,12 @@ const SelfReminder = () => {
                 <div className={'custom-date-container'}>
                     <span className={'custom-count-container'}>
                         <label>За сколько напомнить?</label>
-                        <CustomDropdownInput
-                            options={reminderOptions}
+                        <CustomInput
+                            type="number"
                             value={reminderBefore}
                             placeholder="Выберите время"
-                            className="custom-date"
                             isDisabled={true}
-                            // required
+                            className="custom-input"
                         />
                     </span>
 

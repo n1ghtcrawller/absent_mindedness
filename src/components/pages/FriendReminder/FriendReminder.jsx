@@ -201,14 +201,13 @@ const FriendReminder = () => {
                 </div>
 
                 <div className="custom-date-container">
-                    <span className="custom-count-container">
+                    <span className="custom-before-container">
                         <label>За сколько напомнить?</label>
-                        <CustomDropdownInput
-                            options={reminderOptions}
+                        <CustomInput
                             value={reminderBefore}
                             placeholder="Выберите время"
-                            className="custom-date"
                             isDisabled={true}
+                            className="custom-input"
                         />
                     </span>
 
