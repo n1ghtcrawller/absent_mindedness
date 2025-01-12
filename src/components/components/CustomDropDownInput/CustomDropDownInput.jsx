@@ -12,23 +12,22 @@ const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDis
         setIsOpen(true);
         setFilteredOptions(
             options.filter((option) => {
-                // Проверяем, является ли option строкой или объектом
                 if (typeof option === 'string') {
                     return option.toLowerCase().includes(input.toLowerCase());
-                } else if (typeof option === 'object' && option.name) {
-                    return option.name.toLowerCase().includes(input.toLowerCase());
+                } else if (typeof option === 'object' && option.first_name && option.last_name && option.username) {
+                    return `${option.first_name} ${option.last_name} (${option.username})`;
                 }
-                return false; // Если не строка и нет свойства name, не включаем в результаты
+                return false;
             })
         );
-        onChange(input); // Обновление значения в основном компоненте
+        onChange(input);
     };
 
 
     const handleOptionClick = (option) => {
         setInputValue(option);
-        onChange(option); // Устанавливаем выбранное значение
-        setIsOpen(false); // Закрываем список
+        onChange(option);
+        setIsOpen(false);
     };
 
     return (
@@ -38,16 +37,16 @@ const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDis
                 value={inputValue}
                 onChange={handleInputChange}
                 placeholder={placeholder}
-                onClick={() => !isDisabled && setIsOpen(!isOpen)} // Закрываем/открываем только если не отключен
+                onClick={() => !isDisabled && setIsOpen(!isOpen)}
                 className="dropdown-input"
-                disabled={isDisabled} // Устанавливаем атрибут disabled
+                disabled={isDisabled} 
                 style={{
                     backgroundColor: isDisabled ? '#f0f0f0' : 'white',
                     color: isDisabled ? '#a0a0a0' : 'black',
                     cursor: isDisabled ? 'not-allowed' : 'auto',
                 }}
             />
-            {isOpen && filteredOptions.length > 0 && !isDisabled && ( // Показываем список только если не отключен
+            {isOpen && filteredOptions.length > 0 && !isDisabled && (
                 <ul className="dropdown-list">
                     {filteredOptions.map((option, index) => (
                         <li
