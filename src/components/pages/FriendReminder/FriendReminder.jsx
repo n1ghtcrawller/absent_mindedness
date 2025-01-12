@@ -41,12 +41,8 @@ const FriendReminder = () => {
                 },
             });
             const data = await response.json();
-            const formattedData = data.map(user => ({
-                id: user.user_id,
-                displayName: `${user.first_name} ${user.last_name} (@${user.username})`, // Исправлено на правильный синтаксис
-                username: user.username,
-            }));
-
+            const formattedData = data.map(user => `${user.first_name} ${user.last_name} (@${user.username})`);
+    
             // Обновляем friendsList в reminderData
             setReminderData(prev => ({ ...prev, friendsList: formattedData }));
             localStorage.setItem('friendsList', JSON.stringify(formattedData));
@@ -57,9 +53,6 @@ const FriendReminder = () => {
             setIsLoading(false);
         }
     };
-    const formattedFriendsList = friendsList.map(friend => ({
-        label: friend.displayName
-    }));
     
 
     useEffect(() => {
