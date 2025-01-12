@@ -60,7 +60,7 @@ const FriendReminder = () => {
 
     useEffect(() => {
         fetchUsers(); // Вызываем fetchUsers при монтировании компонента
-    }, [friendsList]); // Пустой массив зависимостей, чтобы запустить только один раз
+    }, []);
 
     useEffect(() => {
         console.log("Список друзей:", friendsList);
