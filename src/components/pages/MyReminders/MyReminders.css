@@ -26,25 +26,26 @@
 }
 
 .reminders-table th {
-    display: none; /* Убираем заголовки таблицы */
+    display: none;
 }
 
 .critical-row {
-    background-color: #ff9999; /* Ярко-красный */
+    background-color: #ff9999;
+    color: black
 }
 
 .no-reminders {
-    font-size: 16px; /* Уменьшаем размер текста для более компактного вида */
+    font-size: 16px;
     color: #666;
 }
 
 .minor-row {
-    background-color: #e6f7e6; /* Светло-зелёный */
+    background-color: #e6f7e6;
     color: black
 }
 
 .low-row {
-    background-color: #f0f4c3; /* Светло-жёлтый */
+    background-color: #f0f4c3;
     color: black
 }
 
