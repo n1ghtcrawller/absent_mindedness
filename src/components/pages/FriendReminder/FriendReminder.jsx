@@ -32,31 +32,30 @@ const FriendReminder = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
-const fetchUsers = async () => {
-    try {
-        const response = await fetch('https://ab-mind.ru/api/get_users', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        const data = await response.json();
-        const formattedData = data.map(user => ({
-            id: user.id,
-            displayName: `${user.first_name} ${user.last_name} (@${user.username})`,
-            username: user.username,
-        }));
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch('https://ab-mind.ru/api/get_users', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            const formattedData = data.map(user => ({
+                id: user.id,
+                displayName: `${user.first_name} ${user.last_name} (@${user.username})`,
+                username: user.username,
+            }));
 
-        setReminderData(prev => ({ ...prev, friendsList: formattedData }));
-        localStorage.setItem('friendsList', JSON.stringify(formattedData));
-        setIsLoading(false);  // Изменение состояния загрузки после получения данных
-    } catch (error) {
-        console.error("Ошибка при получении пользователей:", error);
-        setIsLoading(false);
-    }
-};
-
-    
+            setReminderData(prev => ({ ...prev, friendsList: formattedData }));
+            localStorage.setItem('friendsList', JSON.stringify(formattedData));
+            setIsLoading(false);
+            console.log(friendsList)
+        } catch (error) {
+            console.error("Ошибка при получении пользователей:", error);
+            setIsLoading(false);
+        }
+    };
     
     const filterFriends = (query) => {
         const cachedFriends = JSON.parse(localStorage.getItem('friendsList')) || [];
@@ -144,18 +143,24 @@ const fetchUsers = async () => {
                     </div>
                 )}
 
-<div>
-                <label>Выберите друга</label>
-                {isLoading ? (
-                    <div>Загрузка...</div>  // Индикатор загрузки
-                ) : (
+                <div>
+                    <label>Выберите друга</label>
                     <CustomDropdownInput
-                        friendsList={friendsList}
-                        onChange={(e) => handleInputChange('selectedFriend')(e)}
-                        placeholder="Выберите друга"
+                    friendsList={friendsList}
+                    onChange={(e) => handleInputChange('selectedFriend')(e)}
+                    placeholder="Выберите друга"
                     />
-                )}
-            </div>
+                    <p className="development-note" style={{ fontSize: 'small', color: '#888' }}>
+                        Если вашего друга нет в списке,{' '}
+                        <span
+                            onClick={handleInviteClick}
+                            style={{ color: '#007bff', textDecoration: 'underline', cursor: 'pointer' }}
+                        >
+                            пригласите его!
+                        </span>
+                    </p>
+                </div>
+
                 <div>
                     <label>О чём напомнить?</label>
                     <CustomInput
