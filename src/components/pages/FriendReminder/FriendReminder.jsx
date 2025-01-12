@@ -68,7 +68,7 @@ const FriendReminder = () => {
 
     useEffect(() => {
         console.log("Список друзей:", formattedFriendsList);
-    }, [friendsList]);
+    }, [formattedFriendsList]);
 
     useEffect(() => {
         if (window.Telegram?.WebApp) {
