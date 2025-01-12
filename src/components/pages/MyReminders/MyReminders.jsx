@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MyReminders.css';
 import BackButton from '../../components/BackButton/BackButton';
+import Button from '../../components/Button/Button';
 
 const MyReminders = () => {
     const [reminders, setReminders] = useState([]);
@@ -97,15 +98,14 @@ const MyReminders = () => {
                                 <div className="reminder-details">
                                     <p><strong>Комментарий:</strong> {reminder.comment}</p>
                                     <p><strong>Критичность:</strong> {reminder.critically}</p>
-                                    <button
-                                        className="delete-button"
+                                    <Button
+                                        label={"Удалить Напоминание"}
                                         onClick={(e) => {
                                             e.stopPropagation(); // Prevents closing details when clicking delete
                                             handleDeleteReminder(reminder.id);
                                         }}
                                     >
-                                        Удалить Напоминание
-                                    </button>
+                                    </Button>
                                 </div>
                             )}
                         </div>
