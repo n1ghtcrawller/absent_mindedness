@@ -106,9 +106,10 @@ const FriendReminder = () => {
     };
 
     const handleInputChange = (field) => (value) => {
-        setReminderData((prev) => ({ ...prev, [field]: value }));
+        console.log(`Выбранный объект друга:`, value); // Логируем для проверки
+        setReminderData((prev) => ({ ...prev, [field]: value })); // Сохраняем полный объект
     };
-
+    
     const handleInviteClick = () => {
         navigate('/invite_friend');
     };
@@ -140,7 +141,7 @@ const FriendReminder = () => {
                     <CustomDropdownInput
                         options={friendsList}
                         value={selectedFriend}
-                        onChange={(e) => handleInputChange('selectedFriend')(e)}
+                        onChange={(friend) => handleInputChange('selectedFriend')(friend)}
                         placeholder="Выберите друга"
                     />
                 )}
