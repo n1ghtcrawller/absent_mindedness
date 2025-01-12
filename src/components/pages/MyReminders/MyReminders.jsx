@@ -86,7 +86,7 @@ const MyReminders = () => {
                     {reminders.map((reminder) => (
                         <div
                             key={reminder.id}
-                            className={`reminder-block ${getRowClass(reminder.critically)}`}
+                            className={`reminder-block ${(reminder.critically)}`}
                             onClick={() => toggleReminderDetails(reminder.id)}
                         >
                             <div className="reminder-summary">
@@ -97,7 +97,13 @@ const MyReminders = () => {
                             {selectedReminder === reminder.id && (
                                 <div className="reminder-details">
                                     <p><strong>Комментарий:</strong> {reminder.comment}</p>
-                                    <p><strong>Критичность:</strong> {reminder.critically}</p>
+                                    <p>
+                                        <strong>Критичность:</strong>
+                                        <span className={`critically-text ${getRowClass(reminder.critically)}`}>
+                                            {reminder.critically}
+                                        </span>
+                                    </p>
+
                                     <Button
                                         label={"Выполнено"}
                                         onClick={(e) => {

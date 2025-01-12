@@ -1,3 +1,14 @@
+.reminders-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.reminders-title {
+    margin-bottom: 20px;
+}
+
 .reminders-list {
     display: flex;
     flex-direction: column;
@@ -22,9 +33,35 @@
 .reminder-details {
     margin-top: 10px;
     font-size: 1em;
+    margin-bottom: 10px;
 }
 
 .no-reminders {
     font-size: 1.2em;
     color: #777;
 }
+.minor-row {
+    background-color: #d3ffd3; /* Зеленый для Незначительного */
+    border-left: 5px solid #9ccc65;
+}
+
+.low-row {
+    background-color: #fff9c4; /* Желтый для Низкого */
+    border-left: 5px solid #ffeb3b;
+}
+
+.medium-row {
+    background-color: #ffecb3; /* Оранжевый для Среднего */
+    border-left: 5px solid #ff9800;
+}
+
+.high-row {
+    background-color: #ffccbc; /* Красновато-оранжевый для Высокого */
+    border-left: 5px solid #ff5722;
+}
+
+.critical-row {
+    background-color: #ffebee; /* Светлый красный для Высшего */
+    border-left: 5px solid #f44336;
+}
+
