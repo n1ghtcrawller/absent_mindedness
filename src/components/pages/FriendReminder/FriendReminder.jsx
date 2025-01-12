@@ -42,7 +42,7 @@ const FriendReminder = () => {
             });
             const data = await response.json();
             const formattedData = data.map(user => ({
-                id: user.id,
+                id: user.user_id,
                 displayName: `${user.first_name} ${user.last_name} (@${user.username})`, // Исправлено на правильный синтаксис
                 username: user.username,
             }));
