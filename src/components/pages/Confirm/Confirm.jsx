@@ -29,9 +29,9 @@ const Confirm = () => {
             critically: reminderData.critically,
         };
 
-        console.log("Preparing to send data:", dataToSend); // Проверка данных
+        console.log("Preparing to send data:", dataToSend);
         setSentData(dataToSend);
-        console.log("Sent Data set:", dataToSend); // Проверка sentData
+        console.log("Sent Data set:", dataToSend);
 
         try {
             const response = await axios.post('https://ab-mind.ru/api/create_reminder', dataToSend);
@@ -43,7 +43,7 @@ const Confirm = () => {
         }
     };
 
-    console.log("Reminder Data from context:", reminderData); // Проверка reminderData
+    console.log("Reminder Data from context:", reminderData);
 
     const {
         user,

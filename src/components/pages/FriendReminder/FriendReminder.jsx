@@ -103,8 +103,8 @@ const FriendReminder = () => {
     };
 
     const handleInputChange = (field) => (value) => {
-        console.log(`Выбранный объект друга:`, value); // Логируем для проверки
-        setReminderData((prev) => ({ ...prev, [field]: value })); // Сохраняем полный объект
+        console.log(`Выбранный объект друга:`, value);
+        setReminderData((prev) => ({ ...prev, [field]: value }));
     };
     
     const handleInviteClick = () => {
@@ -133,7 +133,7 @@ const FriendReminder = () => {
             <div>
                 <label>Выберите друга</label>
                 {isLoading ? (
-                    <div>Загрузка...</div>  // Индикатор загрузки
+                    <div>Загрузка...</div>
                 ) : (
                     <CustomDropdownInput
                         options={friendsList}

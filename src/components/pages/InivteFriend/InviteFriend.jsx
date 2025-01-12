@@ -14,9 +14,8 @@ const InviteFriend = () => {
         setLoading(true); // Включение индикатора загрузки
 
         try {
-            const messageId = 'your_prepared_message_id'; // Укажите реальный ID сообщения
+            const messageId = '';
 
-            // Вызов метода shareMessage
             Telegram.WebApp.shareMessage(
                 messageId,
                 (isSent) => {

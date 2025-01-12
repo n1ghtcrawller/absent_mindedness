@@ -1,37 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CustomDropDownInput.css';
 
-const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDisabled = false }) => {
-    const [inputValue, setInputValue] = useState(value || '');
-    const [filteredOptions, setFilteredOptions] = useState(options);
+const CustomDropdownInput = ({ 
+    options = [], 
+    value, 
+    onChange, 
+    placeholder = "", 
+    isDisabled = false 
+}) => {
+    const [inputValue, setInputValue] = useState('');
+    const [filteredOptions, setFilteredOptions] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleInputChange = (e) => {
-        const input = e.target.value;
-        setInputValue(input);
-        setIsOpen(true);
-        setFilteredOptions(
-            options.filter((option) => {
-                if (typeof option === 'string') {
-                    return option.toLowerCase().includes(input.toLowerCase());
-                } else if (typeof option === 'object' && option.first_name && option.last_name && option.username) {
-                    return `${option.first_name} ${option.last_name} (${option.username})`;
-                }
-                return false;
-            })
+    useEffect(() => {
+        if (typeof value === 'string') {
+            setInputValue(value);
+        } else if (value && typeof value === 'object' && value.label) {
+            setInputValue(value.label);
+        }
+    }, [value]);
+
+    useEffect(() => {
+        const formattedOptions = options.map((option) => {
+            if (typeof option === 'string') {
+                return { label: option, value: option };
+            } else if (typeof option === 'object' && option.first_name && option.last_name && option.username) {
+                return { 
+                    label: `${option.first_name} ${option.last_name} (@${option.username})`, 
+                    value: option 
+                };
+            }
+            return null; // Игнорируем неподходящие элементы
+        }).filter(Boolean);
+
+        const filtered = formattedOptions.filter((opt) => 
+            opt.label.toLowerCase().includes(inputValue.toLowerCase())
         );
-        onChange(input);
+        setFilteredOptions(filtered);
+    }, [options, inputValue]);
+
+    const handleInputChange = (e) => {
+        setInputValue(e.target.value);
+        setIsOpen(true);
     };
 
-
     const handleOptionClick = (option) => {
-        setInputValue(option);
-        onChange(option);
+        setInputValue(option.label); // Отображаем label
+        onChange(option.value); // Передаем value в родительский компонент
         setIsOpen(false);
     };
 
     return (
-        <span className="dropdown-container">
+        <div className="dropdown-container">
             <input
                 type="text"
                 value={inputValue}
@@ -39,7 +59,7 @@ const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDis
                 placeholder={placeholder}
                 onClick={() => !isDisabled && setIsOpen(!isOpen)}
                 className="dropdown-input"
-                disabled={isDisabled} 
+                disabled={isDisabled}
                 style={{
                     backgroundColor: isDisabled ? '#f0f0f0' : 'white',
                     color: isDisabled ? '#a0a0a0' : 'black',
@@ -54,12 +74,12 @@ const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDis
                             onClick={() => handleOptionClick(option)}
                             className="dropdown-item"
                         >
-                            {option}
+                            {option.label}
                         </li>
                     ))}
                 </ul>
             )}
-        </span>
+        </div>
     );
 };
 
