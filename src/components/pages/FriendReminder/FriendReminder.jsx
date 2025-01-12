@@ -37,10 +37,10 @@ const FriendReminder = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            })
-            console.log(await response.text()); // Покажет весь ответ;
+            });
     
-            const data = await response.json();
+            // Убираем вызов response.text() и сразу обрабатываем ответ как JSON
+            const data = await response.json(); 
             const formattedData = data.map(user => ({
                 id: user.id,
                 displayName: `${user.first_name} ${user.last_name} (@${user.username})`,
@@ -53,6 +53,7 @@ const FriendReminder = () => {
             console.error("Ошибка при получении пользователей:", error);
         }
     };
+    
     
     const filterFriends = (query) => {
         const cachedFriends = JSON.parse(localStorage.getItem('friendsList')) || [];
