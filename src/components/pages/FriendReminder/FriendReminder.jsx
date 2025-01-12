@@ -27,7 +27,7 @@ const FriendReminder = () => {
         repeatCount,
         reminderBefore,
         comment,
-        friendsList,
+        friendsList = [], // Убедитесь, что friendsList инициализирован
     } = reminderData;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -43,42 +43,30 @@ const FriendReminder = () => {
             const data = await response.json();
             const formattedData = data.map(user => ({
                 id: user.id,
-                displayName: `${user.first_name} ${user.last_name} (@${user.username})`,
+                displayName: `${user.first_name} ${user.last_name} (@${user.username})`, // Исправлено на правильный синтаксис
                 username: user.username,
             }));
 
+            // Обновляем friendsList в reminderData
             setReminderData(prev => ({ ...prev, friendsList: formattedData }));
             localStorage.setItem('friendsList', JSON.stringify(formattedData));
             setIsLoading(false);
-            console.log(friendsList)
+            console.log("Загруженный список друзей:", formattedData); // Логируем загруженный список
         } catch (error) {
             console.error("Ошибка при получении пользователей:", error);
             setIsLoading(false);
         }
     };
-    
-    const filterFriends = (query) => {
-        const cachedFriends = JSON.parse(localStorage.getItem('friendsList')) || [];
-        return cachedFriends.filter(friend =>
-            friend.displayName.toLowerCase().includes(query.toLowerCase())
-        );
-    };
 
     useEffect(() => {
-        fetchUsers();
-    }, []);
-    
+        fetchUsers(); // Вызываем fetchUsers при монтировании компонента
+    }, []); // Пустой массив зависимостей, чтобы запустить только один раз
 
     useEffect(() => {
         if (window.Telegram?.WebApp) {
             const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
             setReminderData((prev) => ({ ...prev, user: webAppUser }));
         }
-    }, [setReminderData]);
-
-    useEffect(() => {
-        const cachedFriends = JSON.parse(localStorage.getItem('friendsList')) || [];
-        setReminderData((prev) => ({ ...prev, friendsList: cachedFriends }));
     }, [setReminderData]);
 
     useEffect(() => {
@@ -94,14 +82,14 @@ const FriendReminder = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (selectedFriend && !friendsList.includes(selectedFriend)) {
+        if (selectedFriend && !friendsList.some(friend => friend.id === selectedFriend.id)) { // Проверяем по id
             const updatedFriendsList = [...friendsList, selectedFriend];
             setReminderData((prev) => ({ ...prev, friendsList: updatedFriendsList }));
             localStorage.setItem('friendsList', JSON.stringify(updatedFriendsList));
         }
 
         const reminderDetails = {
-            creator: `${user?.first_name} ${user?.last_name || ''}`,
+            creator:` ${user?.first_name} ${user?.last_name || ''}`,
             friend: selectedFriend,
             reminderText,
             reminderDate,
