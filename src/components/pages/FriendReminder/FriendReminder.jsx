@@ -57,9 +57,13 @@ const FriendReminder = () => {
             setIsLoading(false);
         }
     };
+    const formattedFriendsList = friendsList.map(friend => ({
+        label: friend.displayName
+    }));
+    
 
     useEffect(() => {
-        fetchUsers(); // Вызываем fetchUsers при монтировании компонента
+        fetchUsers();
     }, []);
 
     useEffect(() => {
@@ -138,7 +142,7 @@ const FriendReminder = () => {
                 <div>
                     <label>Выберите друга</label>
                     <CustomDropdownInput
-                    options={friendsList}
+                    options={formattedFriendsList}
                     onChange={(e) => handleInputChange('selectedFriend')(e)}
                     placeholder="Выберите друга"
                     />
