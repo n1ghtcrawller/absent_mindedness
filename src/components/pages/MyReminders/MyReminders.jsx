@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './MyReminders.css';
 import BackButton from '../../components/BackButton/BackButton';
+
 const MyReminders = () => {
     const [reminders, setReminders] = useState([]);
+    const [selectedReminder, setSelectedReminder] = useState(null);
     const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
 
     useEffect(() => {
@@ -47,24 +49,68 @@ const MyReminders = () => {
         }
     };
 
+    const handleDeleteReminder = async (reminderId) => {
+        try {
+            const response = await fetch('https://ab-mind.ru/api/delete_reminder', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: reminderId })
+            });
+
+            if (response.ok) {
+                setReminders((prevReminders) => prevReminders.filter((reminder) => reminder.id !== reminderId));
+            } else {
+                console.error('Failed to delete reminder:', response.status);
+            }
+        } catch (error) {
+            console.error('Error deleting reminder:', error);
+        }
+    };
+
+    const toggleReminderDetails = (reminderId) => {
+        setSelectedReminder((prevSelected) =>
+            prevSelected === reminderId ? null : reminderId
+        );
+    };
+
     return (
         <div className="reminders-container">
-            <BackButton/>
+            <BackButton />
             <h1 className="reminders-title">Мои Напоминания</h1>
             {reminders.length > 0 ? (
-                <table className="reminders-table">
-                    <tbody>
-                        {reminders.map(reminder => (
-                            <tr key={reminder.id} className={getRowClass(reminder.critically)}>
-                                <td>{reminder.reminderText}</td>
-                                <td>{reminder.reminderDate}</td>
-                                <td>{reminder.reminderTime}</td>
-                                <td>{reminder.comment}</td>
-                                <td>{reminder.critically}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <div className="reminders-list">
+                    {reminders.map((reminder) => (
+                        <div
+                            key={reminder.id}
+                            className={`reminder-block ${getRowClass(reminder.critically)}`}
+                            onClick={() => toggleReminderDetails(reminder.id)}
+                        >
+                            <div className="reminder-summary">
+                                <h3>{reminder.reminderText}</h3>
+                                <p>{reminder.reminderDate} {reminder.reminderTime}</p>
+                            </div>
+
+                            {selectedReminder === reminder.id && (
+                                <div className="reminder-details">
+                                    <p><strong>Комментарий:</strong> {reminder.comment}</p>
+                                    <p><strong>Критичность:</strong> {reminder.critically}</p>
+                                    <button
+                                        className="delete-button"
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevents closing details when clicking delete
+                                            handleDeleteReminder(reminder.id);
+                                        }}
+                                    >
+                                        Удалить Напоминание
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
             ) : (
                 <p className="no-reminders">Напоминаний пока нет.</p>
             )}

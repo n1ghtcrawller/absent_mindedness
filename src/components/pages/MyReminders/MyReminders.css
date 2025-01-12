@@ -1,60 +1,45 @@
-.reminders-container {
-    width: 90%; /* Увеличиваем ширину контейнера для лучшего отображения */
-    max-width: 400px; /* Ограничиваем максимальную ширину */
-    margin: 20px auto;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    overflow-x: auto; /* Добавляем горизонтальную прокрутку при необходимости */
+.reminders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.reminders-title {
-    font-size: 20px; /* Уменьшаем размер заголовка */
-    color: #333;
-    margin-bottom: 15px; /* Уменьшаем отступ */
+.reminder-block {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    cursor: pointer;
 }
 
-.reminders-table {
-    width: 100%;
-    border-collapse: collapse;
+.reminder-block:hover {
+    background-color: #e0e0e0;
+}
+
+.reminder-summary {
+    font-size: 1.2em;
+}
+
+.reminder-details {
     margin-top: 10px;
+    font-size: 1em;
 }
 
-.reminders-table th, .reminders-table td {
-    padding: 8px; /* Уменьшаем отступы в ячейках */
-    border: 1px solid #ddd;
-    text-align: left;
+.delete-button {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
 }
 
-.reminders-table th {
-    display: none;
-}
-
-.critical-row {
-    background-color: #ff9999;
-    color: black
+.delete-button:hover {
+    background-color: #e60000;
 }
 
 .no-reminders {
-    font-size: 16px;
-    color: #666;
-}
-
-.minor-row {
-    background-color: #e6f7e6;
-    color: black
-}
-
-.low-row {
-    background-color: #f0f4c3;
-    color: black
-}
-
-.medium-row {
-    background-color: #ffe4b3; /* Светло-оранжевый */
-    color: black
-}
-
-.high-row {
-    background-color: #ffcccb; /* Светло-красный */
-    color: black
+    font-size: 1.2em;
+    color: #777;
 }
