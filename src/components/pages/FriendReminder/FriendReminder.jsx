@@ -103,7 +103,6 @@ const FriendReminder = () => {
     };
 
     const handleInputChange = (field) => (value) => {
-        console.log(`Выбранный объект друга:`, value);
         setReminderData((prev) => ({ ...prev, [field]: value }));
     };
     

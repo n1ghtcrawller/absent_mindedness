@@ -24,7 +24,7 @@ const CustomDropdownInput = ({
         const formattedOptions = options.map((option) => {
             if (typeof option === 'string') {
                 return { label: option, value: option };
-            } else if (typeof option === 'object' && option.first_name && option.last_name && option.username) {
+            } else if (typeof option === 'object') { // && option.first_name && option.last_name && option.username - добавить потом если необходимо
                 return { 
                     label: `${option.first_name} ${option.last_name} (@${option.username})`, 
                     value: option 
