@@ -11,14 +11,20 @@ const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDis
         setInputValue(input);
         setIsOpen(true);
         setFilteredOptions(
-            options.filter((option) =>
-                option.toLowerCase().includes(input.toLowerCase())
-            )
+            options.filter((option) => {
+                // Проверяем, является ли option строкой или объектом
+                if (typeof option === 'string') {
+                    return option.toLowerCase().includes(input.toLowerCase());
+                } else if (typeof option === 'object' && option.name) {
+                    return option.name.toLowerCase().includes(input.toLowerCase());
+                }
+                return false; // Если не строка и нет свойства name, не включаем в результаты
+            })
         );
         onChange(input); // Обновление значения в основном компоненте
     };
 
-    // Обработка выбора элемента из выпадающего списка
+
     const handleOptionClick = (option) => {
         setInputValue(option);
         onChange(option); // Устанавливаем выбранное значение
