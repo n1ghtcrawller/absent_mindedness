@@ -12,21 +12,18 @@ const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDis
         setIsOpen(true);
         setFilteredOptions(
             options.filter((option) => {
-                // Проверяем, является ли option строкой или объектом
-                if (typeof option === 'string') {
-                    return option.toLowerCase().includes(input.toLowerCase());
-                } else if (typeof option === 'object' && option.name) {
-                    return option.name.toLowerCase().includes(input.toLowerCase());
+                // Предполагаем, что option — это объект с полем displayName
+                if (typeof option === 'object' && option.displayName) {
+                    return option.displayName.toLowerCase().includes(input.toLowerCase());
                 }
-                return false; // Если не строка и нет свойства name, не включаем в результаты
+                return false; // Если не строка и нет поля displayName, не включаем в результаты
             })
         );
         onChange(input); // Обновление значения в основном компоненте
     };
 
-
     const handleOptionClick = (option) => {
-        setInputValue(option);
+        setInputValue(option.displayName); // Используем displayName для отображения
         onChange(option); // Устанавливаем выбранное значение
         setIsOpen(false); // Закрываем список
     };
@@ -38,7 +35,7 @@ const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDis
                 value={inputValue}
                 onChange={handleInputChange}
                 placeholder={placeholder}
-                onClick={() => !isDisabled && setIsOpen(!isOpen)} // Закрываем/открываем только если не отключен
+                onClick={() => !isDisabled && setIsOpen(!isDisabled)} // Закрываем/открываем только если не отключен
                 className="dropdown-input"
                 disabled={isDisabled} // Устанавливаем атрибут disabled
                 style={{
@@ -55,7 +52,7 @@ const CustomDropdownInput = ({ options = [], value, onChange, placeholder, isDis
                             onClick={() => handleOptionClick(option)}
                             className="dropdown-item"
                         >
-                            {option}
+                            {option.displayName} {/* Отображаем displayName */}
                         </li>
                     ))}
                 </ul>
