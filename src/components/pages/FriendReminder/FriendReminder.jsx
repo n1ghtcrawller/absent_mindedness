@@ -27,7 +27,7 @@ const FriendReminder = () => {
         repeatCount,
         reminderBefore,
         comment,
-        friendsList = [], // Убедитесь, что friendsList инициализирован
+        friendsList = [],
     } = reminderData;
 
     const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +47,7 @@ const FriendReminder = () => {
             setReminderData(prev => ({ ...prev, friendsList: formattedData }));
             localStorage.setItem('friendsList', JSON.stringify(formattedData));
             setIsLoading(false);
-            console.log("Загруженный список друзей:", formattedData); // Логируем загруженный список
+            console.log("Загруженный список друзей:", formattedData);
         } catch (error) {
             console.error("Ошибка при получении пользователей:", error);
             setIsLoading(false);
@@ -135,7 +135,7 @@ const FriendReminder = () => {
                 <div>
                     <label>Выберите друга</label>
                     <CustomDropdownInput
-                    options={formattedFriendsList}
+                    options={friendsList}
                     onChange={(e) => handleInputChange('selectedFriend')(e)}
                     placeholder="Выберите друга"
                     />
