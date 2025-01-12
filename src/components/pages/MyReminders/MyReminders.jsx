@@ -105,6 +105,7 @@ const MyReminders = () => {
                                     </p>
 
                                     <Button
+                                        className={"button"}
                                         label={"Выполнено"}
                                         onClick={(e) => {
                                             e.stopPropagation();
