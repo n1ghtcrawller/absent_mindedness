@@ -11,8 +11,12 @@ const MyRemindersFromMe = () => {
     const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const handleGoToMyReminders = navigate('/my_reminders')
-    const [activeButton, setActiveButton] = useState('button2');
+    const handeleGoToMyReminders = () => {
+        if (!isLoading) {
+            navigate('/my_reminders');
+        }
+    };
+        const [activeButton, setActiveButton] = useState('button2');
 
     const handleButtonClick = (buttonId) => {
         setActiveButton(buttonId);
@@ -104,13 +108,17 @@ const MyRemindersFromMe = () => {
             <header className="header">
             <MyReminderButton
                 label="Для меня"
-                onClick={() => handleButtonClick('button1')}
+                onClick={() => {
+                    handleButtonClick('button2');
+                    handeleGoToMyReminders();
+                }}
                 className={activeButton === 'button1' ? 'active' : 'inactive'}
             />
             <MyReminderButton
                 label="От меня"
                 onClick={() => handleButtonClick('button2')}
                 className={activeButton === 'button2' ? 'active' : 'inactive'}
+                disabled={activeButton === 'button2'}
             />
             </header>
             {isLoading ? (

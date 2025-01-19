@@ -45,8 +45,8 @@ const CustomDropdownInput = ({
     };
 
     const handleOptionClick = (option) => {
-        setInputValue(option.label); // Отображаем label
-        onChange(option.value); // Передаем value в родительский компонент
+        setInputValue(option.label);
+        onChange(option.value);
         setIsOpen(false);
     };
 
