@@ -11,8 +11,8 @@
     max-width: 500px;
     margin: 40px auto;
     padding: 20px;
-    border-radius: 15px; /* Закруглённые углы */
-    background: linear-gradient(145deg, #f9f9f9, #eaeaea); /* Лёгкий градиент для фона */
+    border-radius: 15px;
+    background: var(--tg-theme-bg-color);
     color: var(--tg-theme-text-color);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Более выразительная тень */
     display: flex;
