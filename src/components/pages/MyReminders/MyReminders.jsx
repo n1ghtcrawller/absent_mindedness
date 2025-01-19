@@ -23,9 +23,10 @@ const MyReminders = () => {
     };
 
     useEffect(() => {
+        const backButton = window.Telegram.WebApp.BackButton;
 
-        if (webAppUser) {
-            const fetchReminders = async () => {
+        const fetchReminders = async () => {
+            if (webAppUser) {
                 setIsLoading(true);
                 try {
                     const response = await fetch(`https://ab-mind.ru/api/get_reminders/${webAppUser.id}`, {
@@ -45,11 +46,20 @@ const MyReminders = () => {
                 } finally {
                     setIsLoading(false);
                 }
-            };
+            }
+        };
 
-            fetchReminders();
-        }
-    }, [webAppUser]);
+        backButton.show();
+        backButton.onClick(() => {
+            navigate('/main_page');
+        });
+        fetchReminders();
+        return () => {
+            backButton.offClick();
+            backButton.hide();
+        };
+    }, [navigate, webAppUser]);
+
 
 
     const getRowClass = (critically) => {
