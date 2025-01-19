@@ -1,63 +1,135 @@
 :root {
     --primary-button-color: #7a00cc;
     --primary-button-hover-color: #6500a3;
+    --button-text-color: #fff;
+    --highlight-color: #e0bbff; /* Лёгкий сиреневый для акцентов */
+    --error-color: #ff4d4d; /* Яркий красный для ошибок */
+    --sent-message-color: #32a852; /* Зелёный для успешных сообщений */
 }
 
 .confirm-container {
     max-width: 500px;
     margin: 40px auto;
     padding: 20px;
-    border-radius: 8px;
-    background: var(--tg-theme-bg-color);
+    border-radius: 15px; /* Закруглённые углы */
+    background: linear-gradient(145deg, #f9f9f9, #eaeaea); /* Лёгкий градиент для фона */
     color: var(--tg-theme-text-color);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Более выразительная тень */
     display: flex;
     flex-direction: column;
     gap: 15px;
     justify-content: center;
     align-items: center;
     position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    animation: slide-in 0.5s ease-out; /* Плавное появление */
+}
+
+@keyframes slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 h2, p, button {
-    transition: opacity 0.5s ease; /* Плавное исчезновение текста */
+    transition: opacity 0.5s ease, transform 0.3s ease; /* Плавные переходы */
+}
+
+p {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center; /* Центрируем текст */
 }
 
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
     border: none;
     background-color: var(--primary-button-color);
-    color: white;
+    color: var(--button-text-color);
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 25px; /* Полукруглая форма кнопки */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Тень для кнопки */
+    transition: all 0.3s ease;
 }
 
 button:hover {
     background-color: var(--primary-button-hover-color);
+    transform: translateY(-2px); /* Лёгкий "всплеск" при наведении */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Усиление тени при наведении */
 }
 
-/* Скрываем весь контент, кроме утенка и текста отправки */
+button:active {
+    transform: translateY(2px); /* Имитация нажатия */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 .duck-sent-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    animation: fade-in 0.7s ease-in-out; /* Плавное появление утёнка */
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .duck-gif {
-    width: 200px;
-    height: 200px;
-    object-fit: contain; /* Если нужно, чтобы GIF корректно вмещался */
+    width: 220px; /* Увеличен размер GIF */
+    height: 220px;
+    object-fit: contain;
+    border-radius: 50%; /* Скруглённые края GIF */
+    border: 4px solid var(--highlight-color); /* Рамка вокруг GIF */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Выразительная тень */
+    animation: bounce 1.5s infinite; /* Анимация подпрыгивания */
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
 
 .sent-message {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    color: var(--tg-theme-text-color);
+    color: var(--sent-message-color);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Лёгкая тень текста */
 }
+
 .error-message {
-    color: red;
+    color: var(--error-color);
     margin-top: 10px;
     font-weight: bold;
+    animation: shake 0.3s ease; /* Анимация тряски при ошибке */
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
 }

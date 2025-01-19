@@ -1,9 +1,10 @@
 import React from 'react';
-import './Button.css'
-// Создаём функциональный компонент кнопки с передачей пропсов
-const Button = ({ label, onClick, style, className, disabled }) => {
+import './MyReminderButton.css'
+
+const MyReminderButton = ({ label, onClick, style, className, disabled }) => {
     return (
         <button
+            // type={type}
             onClick={onClick}
             style={style}
             className={className}
@@ -15,4 +16,4 @@ const Button = ({ label, onClick, style, className, disabled }) => {
 };
 
 
-export default Button;
+export default MyReminderButton;

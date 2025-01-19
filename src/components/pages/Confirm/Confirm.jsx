@@ -1,23 +1,33 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ReminderContext } from '../../components/ReminderContext/ReminderContext';
 import './Confirm.css';
 import duckGif from './duck.gif';
 import BackButton from "../../components/BackButton/BackButton";
-import Button from "../../components/Button/Button";
+import CustomButton from '../../components/Button/CustomButton';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const Confirm = () => {
     const { reminderData } = useContext(ReminderContext);
     const [isDuckVisible, setIsDuckVisible] = useState(false);
+    const [isDuckLoaded, setIsDuckLoaded] = useState(false); // Для отслеживания загрузки утёнка
     const [errorMessage, setErrorMessage] = useState('');
     const [sentData, setSentData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+
+    // Предзагрузка утёнка при монтировании компонента
+    useEffect(() => {
+        const img = new Image();
+        img.src = duckGif;
+        img.onload = () => setIsDuckLoaded(true); // Устанавливаем флаг после загрузки GIF
+    }, []);
 
     const handleSubmit = async () => {
         setIsDuckVisible(true);
         setErrorMessage('');
         setSentData(null);
+        setIsLoading(true);
 
         const dataToSend = {
             user: reminderData.user.id,
@@ -38,8 +48,9 @@ const Confirm = () => {
             console.log("Reminder created successfully:", response.data);
         } catch (error) {
             console.error("Error creating reminder:", error);
-            setIsDuckVisible(false);
             setErrorMessage('Ошибка при создании напоминания. Попробуйте ещё раз.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -58,7 +69,7 @@ const Confirm = () => {
     return (
         <div className="confirm-container">
             <BackButton />
-            {!isDuckVisible && (
+            {!isDuckVisible && !isLoading && (
                 <div>
                     <p>Подтверждение напоминания</p>
                     <p><strong>Кто:</strong> {user.first_name} {user.last_name}</p>
@@ -72,12 +83,22 @@ const Confirm = () => {
                     <button onClick={handleSubmit}>Отправить</button>
                 </div>
             )}
-    
+
+            {isLoading && ( // Показываем индикатор загрузки
+                <div>
+                    <p>Загрузка...</p>
+                </div>
+            )}
+
             {isDuckVisible && (
                 <div className="duck-sent-container">
-                    <img src={duckGif} alt="Telegram Duck" className="duck-gif" />
+                    {isDuckLoaded ? ( // Показываем утёнка только после загрузки
+                        <img src={duckGif} alt="Telegram Duck" className="duck-gif" />
+                    ) : (
+                        <p>Загрузка утёнка...</p>
+                    )}
                     <p className="sent-message">Отправлено!</p>
-                    <Button onClick={() => navigate('/main_page')} label="На главную" />
+                    <CustomButton onClick={() => navigate('/main_page')} label="На главную" />
                 </div>
             )}
         </div>

@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import './MyReminders.css';
 import BackButton from '../../components/BackButton/BackButton';
-import CustomButton from '../../components/Button/CustomButton';
+import Button from '../../components/Button/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import MyReminderButton from '../../components/MyReminderButtons/MyReminderButton';
 
-const MyReminders = () => {
+const MyRemindersFromMe = () => {
     const [reminders, setReminders] = useState([]);
     const [selectedReminder, setSelectedReminder] = useState(null);
     const webAppUser = window.Telegram.WebApp.initDataUnsafe?.user;
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const handleGoToRemindersFromMe = navigate('/reminders_from_me')
-    const [activeButton, setActiveButton] = useState('button1');
+    const handleGoToMyReminders = navigate('/my_reminders')
+    const [activeButton, setActiveButton] = useState('button2');
 
     const handleButtonClick = (buttonId) => {
         setActiveButton(buttonId);
     };
 
     useEffect(() => {
-
         if (webAppUser) {
             const fetchReminders = async () => {
                 setIsLoading(true);
                 try {
-                    const response = await fetch(`https://ab-mind.ru/api/get_reminders/${webAppUser.id}`, {
+                    const response = await fetch(`https://ab-mind.ru/api/get_reminders_from_me/${webAppUser.id}`, {
                         headers: {
                             Accept: "application/json",
                         },
@@ -145,14 +144,14 @@ const MyReminders = () => {
                                         </span>
                                     </p>
                                     
-                                    <CustomButton
+                                    <Button
                                         className={"button"}
                                         label={"Выполнено"}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleDeleteReminder(reminder.id);
                                         }}
-                                    ></CustomButton>
+                                    ></Button>
                                 </div>
                             )}
                         </div>
@@ -165,4 +164,4 @@ const MyReminders = () => {
     );
 };
 
-export default MyReminders;
+export default MyRemindersFromMe;

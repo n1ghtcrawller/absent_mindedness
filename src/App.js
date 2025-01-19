@@ -10,6 +10,7 @@ import Confirm from "./components/pages/Confirm/Confirm";
 import { ReminderProvider } from "./components/components/ReminderContext/ReminderContext";
 import InviteFriend from "./components/pages/InivteFriend/InviteFriend";
 import MyReminders from './components/pages/MyReminders/MyReminders';
+import MyRemindersFromMe from './components/pages/MyReminders/MyRemindersFromMe';
 
 const tg = window.Telegram.WebApp;
 
@@ -32,6 +33,7 @@ function App() {
                         <Route path={'confirm'} element={<Confirm />} />
                         <Route path={'invite_friend'} element={<InviteFriend />} />
                         <Route path={'my_reminders'} element={<MyReminders />} />
+                        <Route path={'reminders_from_me'} element={<MyRemindersFromMe/>} />
                     </Routes>
                 </ReminderProvider>
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Button from '../../components/Button/Button';
+import CustomButton from '../../components/Button/CustomButton';
 import './StartPage.css';
 import { useNavigate } from "react-router-dom";
 import phone from '../../assets/phone.svg';
@@ -60,7 +60,7 @@ const StartPage = () => {
                 Сервис для управления вниманием и напоминаниями, который позволяет вам не только создавать индивидуализированные уведомления для себя и друзей, но и настраивать их по гибкой системе периодичности. Интуитивно понятный интерфейс и интеллектуальные алгоритмы помогут вам легко организовать свои задачи, а также оставаться на связи с близкими, чтобы никто не забыл о важном.
             </div>
 
-            <Button
+            <CustomButton
                 label="Начать использовать"
                 onClick={handleButtonClick}
                 className="start-button"

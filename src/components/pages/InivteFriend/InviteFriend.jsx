@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './InviteFriend.css';
-import Button from "../../components/Button/Button";
+import CustomButton from '../../components/Button/CustomButton';
 import BackButton from '../../components/BackButton/BackButton';
 
 const InviteFriend = () => {
@@ -38,7 +38,7 @@ const InviteFriend = () => {
             <BackButton/>
             {error && <div className="error-message">{error}</div>} {/* Блок отображения ошибок */}
             {successMessage && <div className="success-message">{successMessage}</div>} {/* Блок успешного сообщения */}
-            <Button
+            <CustomButton
                 label={loading ? 'Отправка...' : 'Пригласить'}
                 onClick={handleSendInvite}
                 disabled={loading}

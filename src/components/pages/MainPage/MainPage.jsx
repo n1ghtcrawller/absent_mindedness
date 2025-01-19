@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '../../components/Button/Button'; // Импортируем компонент Button
-import './MainPage.css'; // Подключение CSS для стилизации (создайте файл при необходимости)
+import CustomButton from '../../components/Button/CustomButton';
+import './MainPage.css';
 import {useNavigate} from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
 const MainPage = () => {
@@ -27,7 +27,7 @@ const MainPage = () => {
             </div>
 
             <div className="button-group">
-                <Button
+                <CustomButton
                     label="Напомнить себе"
                     onClick={handleRemindSelf}
                     className="remind-button"
@@ -35,7 +35,7 @@ const MainPage = () => {
                 />
             </div>
             <div className="button-group">
-                <Button
+                <CustomButton
                     label="Напомнить другу"
                     onClick={handleRemindOthers}
                     className="remind-button"
@@ -43,7 +43,7 @@ const MainPage = () => {
                 />
             </div>
             <div className="button-group">
-                <Button
+                <CustomButton
                     label="Мои напоминания"
                     onClick={handleMyReminders}
                     className="remind-button"

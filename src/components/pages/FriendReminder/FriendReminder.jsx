@@ -5,6 +5,7 @@ import CustomDropdownInput from '../../components/CustomDropDownInput/CustomDrop
 import './FriendReminder.css';
 import { useNavigate } from "react-router-dom";
 import BackButton from "../../components/BackButton/BackButton";
+import CustomButton from '../../components/Button/CustomButton';
 
 const reminderOptions = ['5 минут', '10 минут', '15 минут', '30 минут', '1 час', '2 часа', '3 часа'];
 const reminderCritical = ["Незначительный", "Низкий", "Средний", "Высокий", "Высший"];
