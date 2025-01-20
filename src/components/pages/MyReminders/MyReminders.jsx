@@ -24,10 +24,6 @@ const MyReminders = () => {
 
     useEffect(() => {
         if (webAppUser) {
-            BackButton.onClick(() => {
-                navigate('/main_page')
-
-            });
             const fetchReminders = async () => {
                 setIsLoading(true);
                 try {
