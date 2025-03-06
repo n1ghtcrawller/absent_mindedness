@@ -23,7 +23,7 @@
     padding: 15px;
     background: var(--tg-theme-bg-color);
     cursor: pointer;
-    width: 80%;
+    width: 80vw;
 }
 
 .reminder-summary {
