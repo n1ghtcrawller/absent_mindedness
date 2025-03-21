@@ -8,41 +8,53 @@ const InviteFriend = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
 
+    const generateInviteLink = () => {
+        // Ваша логика генерации ссылки (можно добавить параметры пользователя)
+        return 'https://t.me/your_bot?start=ref_12345';
+    };
+
     const handleSendInvite = async () => {
-        setError(null); // Сброс ошибки перед новой попыткой
-        setSuccessMessage(null); // Сброс успешного сообщения перед новой попыткой
-        setLoading(true); // Включение индикатора загрузки
+        setError(null);
+        setSuccessMessage(null);
+        setLoading(true);
 
         try {
-            const messageId = '';
+            const inviteLink = generateInviteLink();
+            const shareText = encodeURIComponent('Присоединяйся к крутому боту! 🚀');
+            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${shareText}`;
 
-            Telegram.WebApp.shareMessage(
-                messageId,
-                (isSent) => {
-                    if (isSent) {
-                        setSuccessMessage('Сообщение успешно отправлено!'); // Успешное уведомление
-                    } else {
-                        setError('Не удалось отправить сообщение. Попробуйте еще раз.'); // Сообщение об ошибке
-                    }
-                }
-            );
+            Telegram.WebApp.openLink(shareUrl);
+            setSuccessMessage('Диалог приглашения открыт! Поделитесь с друзьями 🤗');
         } catch (error) {
-            setError('Произошла ошибка: ' + error.message); // Отображение ошибки
+            setError('Ошибка: ' + error.message);
         } finally {
-            setLoading(false); // Выключение индикатора загрузки
+            setLoading(false);
         }
     };
 
     return (
         <div className="invite-friend-container">
-            <BackButton/>
-            {error && <div className="error-message">{error}</div>} {/* Блок отображения ошибок */}
-            {successMessage && <div className="success-message">{successMessage}</div>} {/* Блок успешного сообщения */}
-            <CustomButton
-                label={loading ? 'Отправка...' : 'Пригласить'}
-                onClick={handleSendInvite}
-                disabled={loading}
-            />
+            <BackButton />
+
+            <div className="invite-content">
+                <h1>Пригласи друга 👋</h1>
+                <p>Поделись ботом с друзьями и получай бонусы за каждого приглашенного!</p>
+
+                <div className="invite-illustration">
+                    <div className="users-icon">👥</div>
+                </div>
+
+                {error && <div className="error-message">{error}</div>}
+                {successMessage && <div className="success-message">{successMessage}</div>}
+
+                <CustomButton
+                    label={loading ? 'Загрузка...' : 'Пригласить друзей'}
+                    onClick={handleSendInvite}
+                    disabled={loading}
+                    icon="🎁"
+                    className="invite-button"
+                />
+            </div>
         </div>
     );
 };
