@@ -11,17 +11,13 @@ import bonus from '../../assets/slot/bonus.gif';
 import multiplier from '../../assets/slot/multiplier.gif';
 import './Game.css';
 
-// Настройки вероятностей
 const SYMBOLS = [
-  // Стандартные символы (70%)
   { id: '7', src: seven, type: 'regular', weight: 18 },
   { id: '8', src: eight, type: 'regular', weight: 18 },
   { id: '9', src: nine, type: 'regular', weight: 14 },
   { id: '10', src: ten, type: 'regular', weight: 14 },
   { id: 'j', src: jack, type: 'regular', weight: 12 },
   { id: 'q', src: queen, type: 'regular', weight: 14 },
-
-  // Специальные символы
   { id: 'wild', src: wild, type: 'wild', weight: 5 },
   { id: 'scatter', src: scatter, type: 'scatter', weight: 2 },
   { id: 'bonus', src: bonus, type: 'bonus', weight: 1 },
@@ -48,6 +44,7 @@ const SlotMachine = () => {
   ));
   const [spinning, setSpinning] = useState(false);
   const [result, setResult] = useState('');
+  const [winningPositions, setWinningPositions] = useState([]);
 
   useEffect(() => {
     SYMBOLS.forEach(({ src }) => {
@@ -58,8 +55,8 @@ const SlotMachine = () => {
   const spin = async () => {
     setSpinning(true);
     setResult('');
+    setWinningPositions([]);
     
-    // Анимация вращения
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const newReels = Array(5).fill().map(() => 
@@ -74,35 +71,46 @@ const SlotMachine = () => {
   const checkWin = (reels) => {
     const middleRow = reels.map(reel => reel[1]);
     const allSymbols = middleRow.map(s => s.type);
+    let newWinningPositions = [];
 
-    // Проверка Scatter
+    // Scatter check
     const scatters = allSymbols.filter(t => t === 'scatter').length;
     if(scatters >= 3) {
       setResult('Free Spins Activated!');
+      newWinningPositions = middleRow.map((_, i) => ({ col: i, row: 1 }));
+      setWinningPositions(newWinningPositions);
       return;
     }
 
-    // Проверка Wild
+    // Wild check
     if(allSymbols.every(t => t === 'wild')) {
       setResult('JACKPOT WIN 5000x!');
+      newWinningPositions = middleRow.map((_, i) => ({ col: i, row: 1 }));
+      setWinningPositions(newWinningPositions);
       return;
     }
 
-    // Проверка множителей
+    // Multiplier check
     const multipliers = middleRow.filter(s => s.type === 'multiplier');
     if(multipliers.length > 0) {
-      const multiplierValue = multipliers.length * 3;
-      setResult(`Multiplier x${multiplierValue} Applied!`);
+      const value = multipliers.length * 3;
+      setResult(`Multiplier x${value} Applied!`);
+      newWinningPositions = multipliers.map((_, i) => ({ col: i, row: 1 }));
+      setWinningPositions(newWinningPositions);
       return;
     }
 
-    // Проверка бонуса
+    // Bonus check
     if(allSymbols.includes('bonus')) {
       setResult('Bonus Round Started!');
+      newWinningPositions = middleRow
+        .map((s, i) => s.type === 'bonus' ? { col: i, row: 1 } : null)
+        .filter(Boolean);
+      setWinningPositions(newWinningPositions);
       return;
     }
 
-    // Проверка стандартных комбинаций
+    // Regular combinations
     const baseSymbols = middleRow.filter(s => s.type === 'regular');
     if(baseSymbols.length >= 3) {
       const counts = baseSymbols.reduce((acc, s) => {
@@ -114,8 +122,16 @@ const SlotMachine = () => {
       if(maxCount >= 3) {
         const symbol = Object.keys(counts).find(k => counts[k] === maxCount);
         setResult(`${symbol.toUpperCase()} x${maxCount * 5} Win!`);
+        newWinningPositions = middleRow
+          .map((s, i) => s.id === symbol ? { col: i, row: 1 } : null)
+          .filter(Boolean);
+        setWinningPositions(newWinningPositions);
       }
     }
+  };
+
+  const isWinningPosition = (col, row) => {
+    return winningPositions.some(pos => pos.col === col && pos.row === row);
   };
 
   return (
@@ -124,7 +140,10 @@ const SlotMachine = () => {
         {reels.map((reel, col) => (
           <div key={col} className="reel-column">
             {reel.map((symbol, row) => (
-              <div key={`${col}-${row}`} className="symbol">
+              <div 
+                key={`${col}-${row}`} 
+                className={`symbol ${isWinningPosition(col, row) ? 'winning' : ''}`}
+              >
                 <img 
                   src={symbol.src} 
                   alt={symbol.id}

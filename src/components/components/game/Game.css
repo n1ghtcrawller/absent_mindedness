@@ -78,3 +78,25 @@
     font-weight: bold;
     min-height: 24px;
   }
+  .winning {
+    animation: blink 0.8s infinite;
+    position: relative;
+  }
+  
+  .winning::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #2ecc71;
+    border-radius: 8px;
+    box-shadow: 0 0 15px #2ecc71;
+  }
+  
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
