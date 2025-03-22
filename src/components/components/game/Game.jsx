@@ -22,10 +22,10 @@ const SYMBOLS = [
   { id: 'q', src: queen, type: 'regular', weight: 14 },
 
   // Специальные символы
-  { id: 'wild', src: wild, type: 'wild', weight: 5 },      // 5%
-  { id: 'scatter', src: scatter, type: 'scatter', weight: 2 }, // 2%
-  { id: 'bonus', src: bonus, type: 'bonus', weight: 1 },    // 1%
-  { id: 'multiplier', src: multiplier, type: 'multiplier', weight: 3 }, // 3%
+  { id: 'wild', src: wild, type: 'wild', weight: 5 },
+  { id: 'scatter', src: scatter, type: 'scatter', weight: 2 },
+  { id: 'bonus', src: bonus, type: 'bonus', weight: 1 },
+  { id: 'multiplier', src: multiplier, type: 'multiplier', weight: 3 },
 ];
 
 const TOTAL_WEIGHT = SYMBOLS.reduce((sum, s) => sum + s.weight, 0);
@@ -50,7 +50,6 @@ const SlotMachine = () => {
   const [result, setResult] = useState('');
 
   useEffect(() => {
-    // Предзагрузка изображений
     SYMBOLS.forEach(({ src }) => {
       new Image().src = src;
     });

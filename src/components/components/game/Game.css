@@ -5,6 +5,7 @@
     border-radius: 10px;
     max-width: 600px;
     margin: 0 auto;
+    font-weight: 700;
   }
   
   .reels {
@@ -70,10 +71,10 @@
     cursor: not-allowed;
   }
   
-  .result {
+  .result-message {
     margin-top: 15px;
     font-size: 18px;
-    color: #2c3e50;
+    color: #8b00ff;
     font-weight: bold;
     min-height: 24px;
   }
