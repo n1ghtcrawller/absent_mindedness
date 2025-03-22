@@ -9,7 +9,8 @@ const InviteFriend = () => {
     const [successMessage, setSuccessMessage] = useState(null);
 
     const generateInviteLink = () => {
-        // Ваша логика генерации ссылки (можно добавить параметры пользователя)
+        // Добавьте свою логику генерации ссылки
+        // Например, можно использовать Telegram.WebApp.initData для получения данных пользователя
         return 'https://t.me/your_bot?start=ref_12345';
     };
 
@@ -20,14 +21,23 @@ const InviteFriend = () => {
 
         try {
             const inviteLink = generateInviteLink();
-            const shareText = encodeURIComponent('Присоединяйся к крутому боту! 🚀');
-            const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${shareText}`;
+            const messageText = `Присоединяйся к крутому боту! 🚀 ${inviteLink}`;
 
-            Telegram.WebApp.openLink(shareUrl);
-            setSuccessMessage('Диалог приглашения открыт! Поделитесь с друзьями 🤗');
+            // Используем встроенный метод Telegram для отправки сообщения
+            Telegram.WebApp.shareMessage(
+                messageText,
+                (isSent) => {
+                    if (isSent) {
+                        setSuccessMessage('Приглашение успешно отправлено! 🎉');
+                    } else {
+                        setError('Отправка отменена или произошла ошибка 😕');
+                    }
+                    setLoading(false);
+                }
+            );
+
         } catch (error) {
             setError('Ошибка: ' + error.message);
-        } finally {
             setLoading(false);
         }
     };
@@ -38,21 +48,21 @@ const InviteFriend = () => {
 
             <div className="invite-content">
                 <h1>Пригласи друга 👋</h1>
-                <p>Поделись ботом с друзьями и получай бонусы за каждого приглашенного!</p>
+                <p>Получай бонусы за каждого друга, который присоединится по твоей ссылке!</p>
 
                 <div className="invite-illustration">
-                    <div className="users-icon">👥</div>
+                    <div className="animated-icon">🚀</div>
                 </div>
 
                 {error && <div className="error-message">{error}</div>}
                 {successMessage && <div className="success-message">{successMessage}</div>}
 
                 <CustomButton
-                    label={loading ? 'Загрузка...' : 'Пригласить друзей'}
+                    label={loading ? 'Отправка...' : 'Пригласить друзей'}
                     onClick={handleSendInvite}
                     disabled={loading}
-                    icon="🎁"
-                    className="invite-button"
+                    icon="💌"
+                    className="pulse-button"
                 />
             </div>
         </div>
