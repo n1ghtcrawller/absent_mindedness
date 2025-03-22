@@ -1,45 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './InviteFriend.css';
 import CustomButton from '../../components/Button/CustomButton';
 
-const ShareMessageButton = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null);
-    const [messageId, setMessageId] = useState(null);
-
-    // Получаем данные сообщения при монтировании компонента
-    useEffect(() => {
-        if (Telegram.WebApp.initDataUnsafe?.message) {
-            setMessageId(Telegram.WebApp.initDataUnsafe?.message.message_id);
-        }
-    }, []);
+const InviteFriend = () => {
+    const [loading, setLoading] = useState(false);  // Состояние загрузки
+    const [error, setError] = useState(null);  // Состояние ошибки
+    const [successMessage, setSuccessMessage] = useState(null);  // Состояние успеха
 
     const handleShareMessage = () => {
+        setLoading(true);
         setError(null);
         setSuccessMessage(null);
-        setLoading(true);
 
-        if (!messageId) {
-            setError('Сообщение не найдено');
-            setLoading(false);
-            return;
-        }
+        const telegramLink = 'https://t.me/AbMindBot?start=share';
 
         try {
-            Telegram.WebApp.shareMessage(
-                messageId,
-                (isSent) => {
-                    if (isSent) {
-                        setSuccessMessage('Сообщение успешно отправлено!');
-                    } else {
-                        setError('Отправка отменена');
-                    }
-                    setLoading(false);
-                }
-            );
-        } catch (error) {
-            setError('Ошибка при отправке: ' + error.message);
+            window.open(telegramLink, '_blank');
+
+            setSuccessMessage('Сообщение успешно отправлено!');
+        } catch (err) {
+            setError('Произошла ошибка при открытии Telegram.');
+        } finally {
             setLoading(false);
         }
     };
@@ -47,8 +28,6 @@ const ShareMessageButton = () => {
     return (
         <div className="share-message-container">
             <div className="message-content">
-                {/* Ваше содержимое сообщения бота */}
-
                 <div className="share-button-wrapper">
                     {error && <div className="error-message">{error}</div>}
                     {successMessage && <div className="success-message">{successMessage}</div>}
@@ -56,7 +35,7 @@ const ShareMessageButton = () => {
                     <CustomButton
                         label={loading ? 'Отправка...' : 'Переслать сообщение'}
                         onClick={handleShareMessage}
-                        disabled={loading || !messageId}
+                        disabled={loading}
                         icon="📨"
                         className="share-button"
                     />
@@ -66,4 +45,4 @@ const ShareMessageButton = () => {
     );
 };
 
-export default ShareMessageButton;
+export default InviteFriend;
