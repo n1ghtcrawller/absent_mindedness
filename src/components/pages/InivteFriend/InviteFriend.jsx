@@ -9,10 +9,10 @@ const InviteFriend = () => {
     const [successMessage, setSuccessMessage] = useState(null);
 
     const generateInviteLink = () => {
-        const inviteLink = 'https://t.me/share/url?url=https://t.me/AbMindBot&text=Присоединяйся к крутому боту! 🚀';
+        const inviteLink = 'https://t.me/share/url?url=https://t.me/AbMindBot&text=Приглащаю тебя воспользоваться ботом управления внимания! 🚀';
 
         // Открываем ссылку в новой вкладке
-        window.open(inviteLink, '_blank');
+        window.open(inviteLink);
 
         // Обновляем сообщения для пользователя
         setLoading(false);
@@ -23,8 +23,6 @@ const InviteFriend = () => {
         setLoading(true);
         setError(null);
         setSuccessMessage(null);
-
-        // Генерация ссылки и выполнение действия
         generateInviteLink();
     };
 
@@ -44,7 +42,7 @@ const InviteFriend = () => {
                 {successMessage && <div className="success-message">{successMessage}</div>}
 
                 <CustomButton
-                    label={loading ? 'Загрузка...' : 'Пригласить друзей'}
+                    label={loading ? 'Загрузка...' : 'Поделиться'}
                     onClick={handleInviteClick}
                     disabled={loading}
                     icon="🎁"

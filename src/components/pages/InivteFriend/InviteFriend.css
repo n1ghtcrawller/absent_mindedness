@@ -31,17 +31,12 @@
 }
 
 .invite-button {
-    background: #3498db;
     padding: 15px 30px;
-    font-size: 1.2rem;
-    border-radius: 25px;
     transition: transform 0.3s ease;
-
 }
 
 .invite-button:hover {
     transform: scale(1.05);
-    background: #2980b9;
 }
 
 @keyframes bounce {
