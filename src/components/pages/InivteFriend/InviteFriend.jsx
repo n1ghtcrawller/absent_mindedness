@@ -1,72 +1,69 @@
-import React, { useState } from 'react';
-import './InviteFriend.css';
+import React, { useState, useEffect } from 'react';
+import './ShareMessageButton.css';
 import CustomButton from '../../components/Button/CustomButton';
-import BackButton from '../../components/BackButton/BackButton';
 
-const InviteFriend = () => {
+const ShareMessageButton = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+    const [messageId, setMessageId] = useState(null);
 
-    const generateInviteLink = () => {
-        // Добавьте свою логику генерации ссылки
-        // Например, можно использовать Telegram.WebApp.initData для получения данных пользователя
-        return 'https://t.me/your_bot?start=ref_12345';
-    };
+    // Получаем данные сообщения при монтировании компонента
+    useEffect(() => {
+        if (Telegram.WebApp.initDataUnsafe?.message) {
+            setMessageId(Telegram.WebApp.initDataUnsafe.message.message_id);
+        }
+    }, []);
 
-    const handleSendInvite = async () => {
+    const handleShareMessage = () => {
         setError(null);
         setSuccessMessage(null);
         setLoading(true);
 
-        try {
-            const inviteLink = generateInviteLink();
-            const messageText = `Присоединяйся к крутому боту! 🚀 ${inviteLink}`;
+        if (!messageId) {
+            setError('Сообщение не найдено');
+            setLoading(false);
+            return;
+        }
 
-            // Используем встроенный метод Telegram для отправки сообщения
+        try {
             Telegram.WebApp.shareMessage(
-                messageText,
+                messageId,
                 (isSent) => {
                     if (isSent) {
-                        setSuccessMessage('Приглашение успешно отправлено! 🎉');
+                        setSuccessMessage('Сообщение успешно отправлено!');
                     } else {
-                        setError('Отправка отменена или произошла ошибка 😕');
+                        setError('Отправка отменена');
                     }
                     setLoading(false);
                 }
             );
-
         } catch (error) {
-            setError('Ошибка: ' + error.message);
+            setError('Ошибка при отправке: ' + error.message);
             setLoading(false);
         }
     };
 
     return (
-        <div className="invite-friend-container">
-            <BackButton />
+        <div className="share-message-container">
+            <div className="message-content">
+                {/* Ваше содержимое сообщения бота */}
 
-            <div className="invite-content">
-                <h1>Пригласи друга 👋</h1>
-                <p>Получай бонусы за каждого друга, который присоединится по твоей ссылке!</p>
+                <div className="share-button-wrapper">
+                    {error && <div className="error-message">{error}</div>}
+                    {successMessage && <div className="success-message">{successMessage}</div>}
 
-                <div className="invite-illustration">
-                    <div className="animated-icon">🚀</div>
+                    <CustomButton
+                        label={loading ? 'Отправка...' : 'Переслать сообщение'}
+                        onClick={handleShareMessage}
+                        disabled={loading || !messageId}
+                        icon="📨"
+                        className="share-button"
+                    />
                 </div>
-
-                {error && <div className="error-message">{error}</div>}
-                {successMessage && <div className="success-message">{successMessage}</div>}
-
-                <CustomButton
-                    label={loading ? 'Отправка...' : 'Пригласить друзей'}
-                    onClick={handleSendInvite}
-                    disabled={loading}
-                    icon="💌"
-                    className="pulse-button"
-                />
             </div>
         </div>
     );
 };
 
-export default InviteFriend;
+export default ShareMessageButton;
