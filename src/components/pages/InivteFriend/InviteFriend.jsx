@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './ShareMessageButton.css';
+import './InviteFriend.css';
 import CustomButton from '../../components/Button/CustomButton';
 
 const ShareMessageButton = () => {
