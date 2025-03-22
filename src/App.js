@@ -11,6 +11,7 @@ import { ReminderProvider } from "./components/components/ReminderContext/Remind
 import InviteFriend from "./components/pages/InivteFriend/InviteFriend";
 import MyReminders from './components/pages/MyReminders/MyReminders';
 import MyRemindersFromMe from './components/pages/MyReminders/MyRemindersFromMe';
+import SlotMachine from './components/components/game/Game';
 
 const tg = window.Telegram.WebApp;
 
@@ -34,6 +35,7 @@ function App() {
                         <Route path={'invite_friend'} element={<InviteFriend />} />
                         <Route path={'my_reminders'} element={<MyReminders />} />
                         <Route path={'reminders_from_me'} element={<MyRemindersFromMe/>} />
+                        <Route path={'game'} element={<SlotMachine/>} />
                     </Routes>
                 </ReminderProvider>
 

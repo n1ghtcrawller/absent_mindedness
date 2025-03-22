@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import './InviteFriend.css';
 import CustomButton from '../../components/Button/CustomButton';
 import BackButton from '../../components/BackButton/BackButton';
+import {useNavigate} from "react-router-dom";
 
 const InviteFriend = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+    const navigate = useNavigate();
+    const handleGoSpin = () => {
+        navigate('/game');
+    };
+    
 
     const generateInviteLink = () => {
         const inviteLink = 'https://t.me/share/url?url=https://t.me/AbMindBot&text=Приглащаю тебя воспользоваться ботом управления внимания! 🚀';
@@ -47,6 +53,13 @@ const InviteFriend = () => {
                     disabled={loading}
                     icon="🎁"
                     className="invite-button"
+                />
+                <CustomButton
+                    label={'Крутить спины!'}
+                    onClick={handleGoSpin}
+                    disabled={loading}
+                    icon="🎁"
+                    className="spins"
                 />
             </div>
         </div>
