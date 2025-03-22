@@ -11,7 +11,7 @@ const ShareMessageButton = () => {
     // Получаем данные сообщения при монтировании компонента
     useEffect(() => {
         if (Telegram.WebApp.initDataUnsafe?.message) {
-            setMessageId(Telegram.WebApp.initDataUnsafe.message.message_id);
+            setMessageId(Telegram.WebApp.initDataUnsafe?.message.message_id);
         }
     }, []);
 
