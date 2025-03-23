@@ -11,6 +11,8 @@ import bonus from '../../assets/slot/bonus.gif';
 import multiplier from '../../assets/slot/multiplier.gif';
 import './Game.css';
 import BackButton from "../BackButton/BackButton";
+import {useTelegram} from "../../../hooks/useTelegram";
+
 
 const SYMBOLS = [
   { id: '7', src: seven, type: 'regular', weight: 18 },
@@ -38,6 +40,7 @@ const getWeightedSymbol = () => {
 };
 
 const SlotMachine = ({ userId }) => {
+  const { user } = useTelegram();
   const [reels, setReels] = useState(() =>
       Array(5).fill().map(() => Array(3).fill().map(getWeightedSymbol))
   );
@@ -57,7 +60,7 @@ const SlotMachine = ({ userId }) => {
 
     const loadBalance = async () => {
       try {
-        const response = await fetch(`https://ab-mind.ru/api/get_balance/${userId}`);
+        const response = await fetch(`https://ab-mind.ru/api/get_balance/${user?.id}`);
         if (!response.ok) throw new Error('Balance load failed');
         const { balance } = await response.json();
         setBalance(balance);
@@ -69,11 +72,11 @@ const SlotMachine = ({ userId }) => {
     };
 
     loadBalance();
-  }, [userId]);
+  }, [user?.id]);
 
   const updateBalance = async (amount) => {
     try {
-      const response = await fetch(`https://ab-mind.ru/api/add_balance/${userId}`, {
+      const response = await fetch(`https://ab-mind.ru/api/add_balance/${user?.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount })
@@ -101,7 +104,7 @@ const SlotMachine = ({ userId }) => {
 
     try {
       // Списание ставки
-      const reduceResponse = await fetch(`https://ab-mind.ru/api/reduce_balance/${userId}`, {
+      const reduceResponse = await fetch(`https://ab-mind.ru/api/reduce_balance/${user?.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: betAmount })
