@@ -10,6 +10,7 @@ import scatter from '../../assets/slot/scatter.gif';
 import bonus from '../../assets/slot/bonus.gif';
 import multiplier from '../../assets/slot/multiplier.gif';
 import './Game.css';
+import BackButton from "../BackButton/BackButton";
 
 const SYMBOLS = [
   { id: '7', src: seven, type: 'regular', weight: 18 },
@@ -56,7 +57,7 @@ const SlotMachine = ({ userId }) => {
 
     const loadBalance = async () => {
       try {
-        const response = await fetch(`/api/get_balance/${userId}`);
+        const response = await fetch(`https://ab-mind.ru/api/get_balance/${userId}`);
         if (!response.ok) throw new Error('Balance load failed');
         const { balance } = await response.json();
         setBalance(balance);
@@ -72,7 +73,7 @@ const SlotMachine = ({ userId }) => {
 
   const updateBalance = async (amount) => {
     try {
-      const response = await fetch(`/api/add_balance/${userId}`, {
+      const response = await fetch(`https://ab-mind.ru/api/add_balance/${userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount })
@@ -100,7 +101,7 @@ const SlotMachine = ({ userId }) => {
 
     try {
       // Списание ставки
-      const reduceResponse = await fetch(`/api/reduce_balance/${userId}`, {
+      const reduceResponse = await fetch(`https://ab-mind.ru/api/reduce_balance/${userId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: betAmount })
@@ -236,6 +237,7 @@ const SlotMachine = ({ userId }) => {
 
   return (
       <div className="slot-machine">
+        <BackButton />
         <div className="balance-panel">
           <div className="balance-display">
             {isLoading ? 'Загрузка...' : `Баланс: ${balance}`}
