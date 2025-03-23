@@ -219,6 +219,7 @@
 }
 
 .chests-container {
+  width: 90%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
@@ -231,6 +232,7 @@
   border: none;
   cursor: pointer;
   transition: transform 0.3s;
+  width: 30px;
 }
 
 .chest-button:hover {
