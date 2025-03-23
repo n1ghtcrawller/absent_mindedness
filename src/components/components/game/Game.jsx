@@ -11,8 +11,7 @@ import bonus from '../../assets/slot/bonus.gif';
 import multiplier from '../../assets/slot/multiplier.gif';
 import './Game.css';
 import BackButton from "../BackButton/BackButton";
-import {useTelegram} from "../../../hooks/useTelegram";
-
+import { useTelegram } from "../../../hooks/useTelegram";
 
 const SYMBOLS = [
   { id: '7', src: seven, type: 'regular', weight: 18 },
@@ -39,7 +38,7 @@ const getWeightedSymbol = () => {
   return SYMBOLS[0];
 };
 
-const SlotMachine = ({ userId }) => {
+const SlotMachine = () => {
   const { user } = useTelegram();
   const [reels, setReels] = useState(() =>
       Array(5).fill().map(() => Array(3).fill().map(getWeightedSymbol))
@@ -51,6 +50,10 @@ const SlotMachine = ({ userId }) => {
   const [balance, setBalance] = useState(0);
   const [betAmount, setBetAmount] = useState(100);
   const [isLoading, setIsLoading] = useState(true);
+  const [bonusRound, setBonusRound] = useState(null);
+  const [freeSpins, setFreeSpins] = useState(0);
+  const [selectedChests, setSelectedChests] = useState([]);
+  const [bonusMultiplier, setBonusMultiplier] = useState(1);
   const newReelsRef = useRef(null);
 
   useEffect(() => {
@@ -71,8 +74,14 @@ const SlotMachine = ({ userId }) => {
       }
     };
 
-    loadBalance();
+    if (user?.id) loadBalance();
   }, [user?.id]);
+
+  useEffect(() => {
+    if (freeSpins > 0 && !spinning) {
+      spin();
+    }
+  }, [freeSpins]);
 
   const updateBalance = async (amount) => {
     try {
@@ -90,31 +99,30 @@ const SlotMachine = ({ userId }) => {
     }
   };
 
-  const spin = async () => {
+  const spin = async (isFreeSpin = false) => {
     if (isLoading) return;
-    if (betAmount <= 0 || betAmount > 1000) {
+    if (!isFreeSpin && (betAmount <= 0 || betAmount > 1000)) {
       setResult('Некорректная ставка!');
       return;
     }
 
-    if (balance < betAmount) {
+    if (!isFreeSpin && balance < betAmount) {
       setResult('Недостаточно средств!');
       return;
     }
 
     try {
-      // Списание ставки
-      const reduceResponse = await fetch(`https://ab-mind.ru/api/reduce_balance/${user?.id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: betAmount })
-      });
+      if (!isFreeSpin) {
+        const reduceResponse = await fetch(`https://ab-mind.ru/api/reduce_balance/${user?.id}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amount: betAmount })
+        });
+        if (!reduceResponse.ok) throw new Error('Списание не удалось');
+        const { new_balance } = await reduceResponse.json();
+        setBalance(new_balance);
+      }
 
-      if (!reduceResponse.ok) throw new Error('Списание не удалось');
-      const { new_balance } = await reduceResponse.json();
-      setBalance(new_balance);
-
-      // Запуск вращения
       setSpinning(true);
       setResult('');
       setWinningPositions([]);
@@ -144,15 +152,16 @@ const SlotMachine = ({ userId }) => {
         await new Promise(resolve => setTimeout(resolve, hasScatter ? 800 : 200));
       }
 
-      // Проверка выигрыша
       const winData = checkWin(newReels);
       if (winData.amount > 0) {
-        await updateBalance(winData.amount);
-        setResult(`${winData.message} +${winData.amount}`);
-      } else {
+        const totalWin = winData.amount * bonusMultiplier;
+        await updateBalance(totalWin);
+        setResult(`${winData.message} +${totalWin}`);
+      } else if (!winData.message) {
         setResult('Повезет в следующий раз!');
       }
 
+      if (freeSpins > 0) setFreeSpins(prev => prev - 1);
     } catch (error) {
       console.error('Spin error:', error);
       setResult('Ошибка операции');
@@ -166,50 +175,69 @@ const SlotMachine = ({ userId }) => {
     let winAmount = 0;
     let winPositions = [];
 
-    const scatterCount = reels.flat().filter(s => s.type === 'scatter').length;
-    if (scatterCount >= 3) {
-      winMessage = 'Free Spins Activated!';
-      winAmount = betAmount * 15;
+    const bonusCount = reels.flat().filter(s => s.type === 'bonus').length;
+    if (bonusCount >= 3) {
+      if (bonusCount >= 5) {
+        setBonusRound('jackpot');
+        winMessage = 'Прогрессивный джекпот!';
+        winAmount = calculateJackpot();
+      } else if (bonusCount === 4) {
+        setFreeSpins(10);
+        setBonusMultiplier(3);
+        winMessage = '10 бесплатных спинов с x3 множителем!';
+      } else {
+        setBonusRound('chest');
+        winMessage = 'Выберите 3 сундука!';
+      }
       winPositions = reels.flatMap((reel, col) =>
-          reel.map((s, row) => s.type === 'scatter' ? { col, row } : null)
+          reel.map((s, row) => s.type === 'bonus' ? { col, row } : null)
       ).filter(Boolean);
     } else {
-      const winningLines = [
-        [ { col: 0, row: 0 }, { col: 1, row: 0 }, { col: 2, row: 0 }, { col: 3, row: 0 }, { col: 4, row: 0 } ],
-        [ { col: 0, row: 1 }, { col: 1, row: 1 }, { col: 2, row: 1 }, { col: 3, row: 1 }, { col: 4, row: 1 } ],
-        [ { col: 0, row: 2 }, { col: 1, row: 2 }, { col: 2, row: 2 }, { col: 3, row: 2 }, { col: 4, row: 2 } ],
-        [ { col: 0, row: 0 }, { col: 1, row: 1 }, { col: 2, row: 2 }, { col: 3, row: 1 }, { col: 4, row: 0 } ],
-        [ { col: 0, row: 2 }, { col: 1, row: 1 }, { col: 2, row: 0 }, { col: 3, row: 1 }, { col: 4, row: 2 } ],
-      ];
+      const scatterCount = reels.flat().filter(s => s.type === 'scatter').length;
+      if (scatterCount >= 3) {
+        winMessage = 'Free Spins Activated!';
+        winAmount = betAmount * 15;
+        winPositions = reels.flatMap((reel, col) =>
+            reel.map((s, row) => s.type === 'scatter' ? { col, row } : null)
+        ).filter(Boolean);
+      } else {
+        const winningLines = [
+          [ { col: 0, row: 0 }, { col: 1, row: 0 }, { col: 2, row: 0 }, { col: 3, row: 0 }, { col: 4, row: 0 } ],
+          [ { col: 0, row: 1 }, { col: 1, row: 1 }, { col: 2, row: 1 }, { col: 3, row: 1 }, { col: 4, row: 1 } ],
+          [ { col: 0, row: 2 }, { col: 1, row: 2 }, { col: 2, row: 2 }, { col: 3, row: 2 }, { col: 4, row: 2 } ],
+          [ { col: 0, row: 0 }, { col: 1, row: 1 }, { col: 2, row: 2 }, { col: 3, row: 1 }, { col: 4, row: 0 } ],
+          [ { col: 0, row: 2 }, { col: 1, row: 1 }, { col: 2, row: 0 }, { col: 3, row: 1 }, { col: 4, row: 2 } ],
+        ];
 
-      const calculateWin = (symbol, consecutive) => {
-        const multipliers = {
-          'wild': 5000,
-          'multiplier': consecutive * 3,
-          'bonus': 20,
-          '7': 10, '8': 8, '9': 7, '10': 6, 'j': 5, 'q': 5
+        const calculateWin = (symbol, consecutive) => {
+          const multipliers = {
+            'wild': 5000,
+            'multiplier': consecutive * 3,
+            'bonus': 20,
+            '7': 10, '8': 8, '9': 7, '10': 6, 'j': 5, 'q': 5
+          };
+          return betAmount * (multipliers[symbol] || 0);
         };
-        return betAmount * (multipliers[symbol] || 0);
-      };
 
-      for (const line of winningLines) {
-        const lineSymbols = line.map(({ col, row }) => reels[col][row]);
-        const consecutive = countConsecutive(lineSymbols);
+        for (const line of winningLines) {
+          const lineSymbols = line.map(({ col, row }) => reels[col][row]);
+          const consecutive = countConsecutive(lineSymbols);
 
-        if (lineSymbols[0].type === 'wild' && consecutive === 5) {
-          winAmount = calculateWin('wild');
-          winMessage = 'JACKPOT WIN 5000x!';
-          break;
-        }
+          if (lineSymbols[0].type === 'wild' && consecutive === 5) {
+            winAmount = calculateWin('wild');
+            winMessage = 'JACKPOT WIN 5000x!';
+            break;
+          }
 
-        if (consecutive >= 3) {
-          const symbolType = lineSymbols[0].type;
-          const win = calculateWin(symbolType === 'regular' ? lineSymbols[0].id : symbolType, consecutive);
+          if (consecutive >= 3) {
+            const symbolType = lineSymbols[0].type;
+            const win = calculateWin(symbolType === 'regular' ? lineSymbols[0].id : symbolType, consecutive);
 
-          if (win > winAmount) {
-            winAmount = win;
-            winMessage = `${lineSymbols[0].id.toUpperCase()} x${consecutive} Win!`;
-            winPositions = line.slice(0, consecutive);
+            if (win > winAmount) {
+              winAmount = win;
+              winMessage = `${lineSymbols[0].id.toUpperCase()} x${consecutive} Win!`;
+              winPositions = line.slice(0, consecutive);
+            }
           }
         }
       }
@@ -217,6 +245,47 @@ const SlotMachine = ({ userId }) => {
 
     setWinningPositions(winPositions);
     return { message: winMessage, amount: winAmount };
+  };
+
+  const calculateJackpot = () => {
+    const jackpots = {
+      mini: betAmount * 50,
+      major: betAmount * 100,
+      mega: betAmount * 500
+    };
+    const random = Math.random();
+
+    if (random < 0.6) return jackpots.mini;
+    if (random < 0.9) return jackpots.major;
+    return jackpots.mega;
+  };
+
+  const handleChestSelection = async (chestId) => {
+    if (selectedChests.length >= 3) return;
+
+    const newSelected = [...selectedChests, chestId];
+    setSelectedChests(newSelected);
+
+    if (newSelected.length === 3) {
+      const rewards = newSelected.map(() => ({
+        type: Math.random() < 0.5 ? 'coins' : 'multiplier',
+        value: Math.floor(Math.random() * 5) + 1
+      }));
+
+      let totalWin = 0;
+      rewards.forEach(reward => {
+        if (reward.type === 'coins') {
+          totalWin += betAmount * reward.value;
+        } else {
+          setBonusMultiplier(prev => prev * reward.value);
+        }
+      });
+
+      await updateBalance(totalWin);
+      setResult(`Выигрыш: ${totalWin} + множитель x${bonusMultiplier}`);
+      setBonusRound(null);
+      setSelectedChests([]);
+    }
   };
 
   const countConsecutive = (lineSymbols) => {
@@ -233,19 +302,60 @@ const SlotMachine = ({ userId }) => {
   };
 
   const handleBetChange = (amount) => {
-    if (amount >= 0 && amount <= 1000) {
-      setBetAmount(Math.floor(amount));
-    }
+    const value = Math.max(1, Math.min(1000, Number(amount) || 1));
+    setBetAmount(value);
+  };
+
+  const renderBonusRound = () => {
+    if (!bonusRound) return null;
+
+    return (
+        <div className="bonus-overlay">
+          {bonusRound === 'chest' && (
+              <>
+                <h3>Выберите 3 сундука!</h3>
+                <div className="chests-container">
+                  {[1, 2, 3, 4, 5].map(id => (
+                      <button
+                          key={id}
+                          onClick={() => handleChestSelection(id)}
+                          disabled={selectedChests.includes(id)}
+                          className={`chest ${selectedChests.includes(id) ? 'opened' : ''}`}
+                      >
+                        {selectedChests.includes(id) ? '🎁' : '🎒'}
+                      </button>
+                  ))}
+                </div>
+              </>
+          )}
+
+          {bonusRound === 'jackpot' && (
+              <>
+                <h3>🎉 ДЖЕКПОТ! 🎉</h3>
+                <div className="jackpot-wheel"></div>
+                <button
+                    className="spin-btn"
+                    onClick={() => {
+                      setBonusRound(null);
+                      updateBalance(calculateJackpot());
+                    }}
+                >
+                  Получить приз!
+                </button>
+              </>
+          )}
+        </div>
+    );
   };
 
   return (
       <div className="slot-machine">
         <BackButton />
+
         <div className="balance-panel">
           <div className="balance-display">
             {isLoading ? 'Загрузка...' : `Баланс: ${balance}`}
           </div>
-
           <div className="bet-controls">
             <input
                 type="number"
@@ -256,9 +366,8 @@ const SlotMachine = ({ userId }) => {
                 disabled={spinning || isLoading}
                 className="bet-input"
             />
-
             <div className="quick-bets">
-              {[1, 2, 5].map((amount) => (
+              {[50, 100, 200].map((amount) => (
                   <button
                       key={amount}
                       onClick={() => handleBetChange(amount)}
@@ -294,15 +403,19 @@ const SlotMachine = ({ userId }) => {
           ))}
         </div>
 
-        <button
-            onClick={spin}
-            disabled={spinning || isLoading || balance < betAmount}
-            className="spin-btn"
-        >
-          {spinning ? 'Крутим...' : `Играть за ${betAmount}`}
-        </button>
+        <div className="controls">
+          <button
+              onClick={() => spin()}
+              disabled={spinning || isLoading || balance < betAmount || !!bonusRound}
+              className="spin-btn"
+          >
+            {freeSpins > 0 ? `Бесплатные спины: ${freeSpins}` :
+                spinning ? 'Крутим...' : `Играть за ${betAmount}`}
+          </button>
+        </div>
 
         {result && <div className="result-message">{result}</div>}
+        {renderBonusRound()}
       </div>
   );
 };
