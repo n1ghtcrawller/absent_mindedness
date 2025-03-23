@@ -12,6 +12,7 @@ import multiplier from '../../assets/slot/multiplier.gif';
 import './Game.css';
 import BackButton from "../BackButton/BackButton";
 import { useTelegram } from "../../../hooks/useTelegram";
+import GameRules from "./GameRules/GameRules";
 
 const SYMBOLS = [
   { id: '7', src: seven, type: 'regular', weight: 18 },
@@ -211,31 +212,41 @@ const SlotMachine = () => {
 
         const calculateWin = (symbol, consecutive) => {
           const multipliers = {
-            'wild': 5000,
-            'multiplier': consecutive * 3,
-            'bonus': 20,
-            '7': 10, '8': 8, '9': 7, '10': 6, 'j': 5, 'q': 5
+            'wild': { 3: 500, 4: 2000, 5: 5000 },
+            'multiplier': { 3: 3, 4: 5, 5: 10 },
+            '7': { 3: 5, 4: 10, 5: 20 },
+            '8': { 3: 5, 4: 10, 5: 20 },
+            '9': { 3: 6, 4: 12, 5: 25 },
+            '10': { 3: 7, 4: 15, 5: 30 },
+            'j': { 3: 8, 4: 18, 5: 40 },
+            'q': { 3: 10, 4: 25, 5: 50 }
           };
-          return betAmount * (multipliers[symbol] || 0);
+
+          const symbolKey = symbol.type === 'regular' ? symbol.id : symbol.type;
+          return betAmount * (multipliers[symbolKey]?.[consecutive] || 0);
         };
 
         for (const line of winningLines) {
           const lineSymbols = line.map(({ col, row }) => reels[col][row]);
           const consecutive = countConsecutive(lineSymbols);
 
-          if (lineSymbols[0].type === 'wild' && consecutive === 5) {
-            winAmount = calculateWin('wild');
-            winMessage = 'JACKPOT WIN 5000x!';
-            break;
-          }
-
           if (consecutive >= 3) {
             const symbolType = lineSymbols[0].type;
-            const win = calculateWin(symbolType === 'regular' ? lineSymbols[0].id : symbolType, consecutive);
+            const symbol = symbolType === 'regular' ? lineSymbols[0].id : symbolType;
+            const win = calculateWin(lineSymbols[0], consecutive);
+
+            // Определение сообщения в зависимости от количества символов
+            let comboMessage;
+            switch(consecutive) {
+              case 3: comboMessage = 'x3 Комбо!'; break;
+              case 4: comboMessage = 'x5 Мега Комбо!!'; break;
+              case 5: comboMessage = 'x10 УЛЬТРА КОМБО!!!'; break;
+              default: comboMessage = '';
+            }
 
             if (win > winAmount) {
               winAmount = win;
-              winMessage = `${lineSymbols[0].id.toUpperCase()} x${consecutive} Win!`;
+              winMessage = `${lineSymbols[0].id.toUpperCase()} ${comboMessage}`;
               winPositions = line.slice(0, consecutive);
             }
           }
@@ -289,16 +300,27 @@ const SlotMachine = () => {
   };
 
   const countConsecutive = (lineSymbols) => {
-    let count = 1;
+    let maxCount = 1;
+    let currentCount = 1;
+    const baseSymbol = lineSymbols[0].id;
+
     for (let i = 1; i < lineSymbols.length; i++) {
-      if (lineSymbols[i].id === lineSymbols[0].id) count++;
-      else break;
+      if (lineSymbols[i].id === baseSymbol) {
+        currentCount++;
+        if (currentCount > maxCount) maxCount = currentCount;
+      } else {
+        break; // Прерываем при первом несовпадении
+      }
     }
-    return count;
+
+    return maxCount;
   };
 
   const isWinningPosition = (col, row) => {
-    return winningPositions.some(pos => pos.col === col && pos.row === row);
+    const position = winningPositions.some(pos => pos.col === col && pos.row === row);
+    const comboLength = winningPositions.length;
+
+    return position ? `winning ${comboLength >= 4 ? 'ultra-combo' : ''}` : '';
   };
 
   const handleBetChange = (amount) => {
@@ -367,7 +389,7 @@ const SlotMachine = () => {
                 className="bet-input"
             />
             <div className="quick-bets">
-              {[50, 100, 200].map((amount) => (
+              {[1, 2, 5].map((amount) => (
                   <button
                       key={amount}
                       onClick={() => handleBetChange(amount)}
@@ -416,6 +438,7 @@ const SlotMachine = () => {
 
         {result && <div className="result-message">{result}</div>}
         {renderBonusRound()}
+        <GameRules />
       </div>
   );
 };

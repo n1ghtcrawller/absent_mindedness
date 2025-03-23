@@ -1,0 +1,147 @@
+.game-rules-container {
+    margin: 25px auto;
+    width: 90%;
+    max-width: 600px;
+    font-family: 'Arial', sans-serif;
+}
+
+.rules-toggle {
+    background: linear-gradient(145deg, #8b00ff, #6a00cc);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: all 0.4s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(139, 0, 255, 0.2);
+}
+
+.rules-toggle::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+}
+
+.rules-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+}
+
+.rules-toggle.active {
+    background: linear-gradient(145deg, #6a00cc, #8b00ff);
+}
+.rules-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    margin-top: 15px;
+    transition:
+            max-height 0.5s ease-in-out,
+            opacity 0.4s ease-in-out,
+            padding 0.4s ease-in-out;
+}
+
+.rules-content.open {
+    max-height: 1500px; /* Достаточно для контента */
+    opacity: 1;
+    padding: 25px;
+}
+
+.rules-title {
+    color: #2c3e50;
+    margin: 0 0 25px 0;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.rules-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rule-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rule-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    image-rendering: crisp-edges;
+    flex-shrink: 0;
+}
+
+.symbol-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.rule-text {
+    color: #34495e;
+    font-size: 16px;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.bonus-count {
+    background: #e74c3c;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+@media (max-width: 768px) {
+    .game-rules-container {
+        width: 95%;
+    }
+
+    .rule-item {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px 0;
+        justify-content: center;
+
+    }
+
+    .rule-icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .rule-text {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    .rules-content.open {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rules-toggle {
+        font-size: 14px;
+        padding: 12px 20px;
+    }
+
+    .bonus-count {
+        font-size: 12px;
+        padding: 3px 8px;
+    }
+}
