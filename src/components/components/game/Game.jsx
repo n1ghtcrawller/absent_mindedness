@@ -57,8 +57,24 @@ const SlotMachine = () => {
   const [bonusMultiplier, setBonusMultiplier] = useState(1);
   const [isUpdatingBalance, setIsUpdatingBalance] = useState(false);
   const newReelsRef = useRef(null);
+  const [vpnDetected, setVpnDetected] = useState(false);
+  const IPINFO_TOKEN = 'e5d0dc81a22445668aa4f3808c9df741';
 
   useEffect(() => {
+    const checkVPN = async () => {
+      try {
+        const response = await fetch(`https://vpnapi.io/api/?key=${IPINFO_TOKEN}`);
+        const data = await response.json();
+        if (data.security.vpn || data.security.proxy) {
+          setVpnDetected(true);
+          setResult('Для корректной работы сервиса, отключите VPN');
+        }
+      } catch (error) {
+        console.error('Ошибка проверки VPN:', error);
+      }
+    };checkVPN()});
+
+    useEffect(() => {
     SYMBOLS.forEach(({ src }) => {
       new Image().src = src;
     });
@@ -450,6 +466,6 @@ const SlotMachine = () => {
         <GameRules />
       </div>
   );
-};
+}
 
 export default SlotMachine;
