@@ -15,6 +15,8 @@ const FriendReminder = () => {
     const navigate = useNavigate();
 
     const [isFormValid, setIsFormValid] = useState(false);
+    const [currentDate, setCurrentDate] = useState('');
+    const [currentTime, setCurrentTime] = useState('');
     const dateInputRef = useRef(null);
     const timeInputRef = useRef(null);
 
@@ -33,6 +35,24 @@ const FriendReminder = () => {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    useEffect(() => {
+        const updateDateTime = () => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+
+            setCurrentDate(`${year}-${month}-${day}`);
+            setCurrentTime(`${hours}:${minutes}`);
+        };
+
+        const timer = setInterval(updateDateTime, 1000);
+        updateDateTime();
+        return () => clearInterval(timer);
+    }, []);
+
     const fetchUsers = async () => {
         try {
             const response = await fetch('https://ab-mind.ru/api/get_users', {
@@ -45,21 +65,15 @@ const FriendReminder = () => {
             setReminderData(prev => ({ ...prev, friendsList: data }));
             localStorage.setItem('friendsList', JSON.stringify(data));
             setIsLoading(false);
-            console.log("Загруженный список друзей:", data);
         } catch (error) {
             console.error("Ошибка при получении пользователей:", error);
             setIsLoading(false);
         }
     };
-    
 
     useEffect(() => {
         fetchUsers();
     }, []);
-
-    useEffect(() => {
-        console.log("Список друзей который загружен:", friendsList);
-    }, [friendsList]);
 
     useEffect(() => {
         if (window.Telegram?.WebApp) {
@@ -69,26 +83,42 @@ const FriendReminder = () => {
     }, [setReminderData]);
 
     useEffect(() => {
+        const isDateTimeValid = () => {
+            if (!reminderDate || !reminderTime) return false;
+            const selectedDateTime = new Date(`${reminderDate}T${reminderTime}`);
+            const now = new Date();
+            return selectedDateTime > now;
+        };
+
         setIsFormValid(
             !!reminderText &&
             !!reminderDate &&
             !!reminderTime &&
             !!critically &&
-            repeatCount > 0
+            repeatCount > 0 &&
+            isDateTimeValid()
         );
     }, [reminderText, reminderDate, reminderTime, critically, repeatCount]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (selectedFriend && !friendsList.some(friend => friend.id === selectedFriend.id)) { // Проверяем по id
+        const selectedDateTime = new Date(`${reminderDate}T${reminderTime}`);
+        const now = new Date();
+
+        if (selectedDateTime <= now) {
+            alert('Пожалуйста, выберите будущие дату и время');
+            return;
+        }
+
+        if (selectedFriend && !friendsList.some(friend => friend.id === selectedFriend.id)) {
             const updatedFriendsList = [...friendsList, selectedFriend];
             setReminderData((prev) => ({ ...prev, friendsList: updatedFriendsList }));
             localStorage.setItem('friendsList', JSON.stringify(updatedFriendsList));
         }
 
         const reminderDetails = {
-            creator:` ${user?.first_name} ${user?.last_name || ''}`,
+            creator: ` ${user?.first_name} ${user?.last_name || ''}`,
             friend: selectedFriend,
             reminderText,
             reminderDate,
@@ -106,7 +136,7 @@ const FriendReminder = () => {
     const handleInputChange = (field) => (value) => {
         setReminderData((prev) => ({ ...prev, [field]: value }));
     };
-    
+
     const handleInviteClick = () => {
         navigate('/invite_friend');
     };
@@ -130,19 +160,19 @@ const FriendReminder = () => {
                     </div>
                 )}
 
-            <div>
-                <label>Выберите друга</label>
-                {isLoading ? (
-                    <div>Загрузка...</div>
-                ) : (
-                    <CustomDropdownInput
-                        options={friendsList}
-                        value={selectedFriend}
-                        onChange={(friend) => handleInputChange('selectedFriend')(friend)}
-                        placeholder="Выберите друга"
-                    />
-                )}
-                <p className="development-note" style={{ fontSize: 'small', color: '#888' }}>
+                <div>
+                    <label>Выберите друга</label>
+                    {isLoading ? (
+                        <div>Загрузка...</div>
+                    ) : (
+                        <CustomDropdownInput
+                            options={friendsList}
+                            value={selectedFriend}
+                            onChange={(friend) => handleInputChange('selectedFriend')(friend)}
+                            placeholder="Выберите друга"
+                        />
+                    )}
+                    <p className="development-note" style={{ fontSize: 'small', color: '#888' }}>
                         Если вашего друга нет в списке,{' '}
                         <span
                             onClick={handleInviteClick}
@@ -151,7 +181,7 @@ const FriendReminder = () => {
                             пригласите его!
                         </span>
                     </p>
-            </div>
+                </div>
 
                 <div>
                     <label>О чём напомнить?</label>
@@ -186,6 +216,7 @@ const FriendReminder = () => {
                             onChange={(e) => handleInputChange('reminderDate')(e.target.value)}
                             className="custom-date"
                             required
+                            min={currentDate}
                         />
                     </span>
                     <span className="time-div">
@@ -197,6 +228,7 @@ const FriendReminder = () => {
                             onChange={(e) => handleInputChange('reminderTime')(e.target.value)}
                             className="custom-time"
                             required
+                            min={reminderDate === currentDate ? currentTime : undefined}
                         />
                     </span>
                 </div>
